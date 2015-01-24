@@ -9,6 +9,7 @@
     "app-router": "latest",
     "core-icons": "Polymer/core-icons#latest",
     "core-elements":"Polymer/core-elements#latest",
-    "paper-elements":"Polymer/paper-elements#latest"
+    "paper-elements":"Polymer/paper-elements#latest",
+    "q": "latest"
   }
 }
