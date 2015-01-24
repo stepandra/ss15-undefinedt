@@ -1,0 +1,50 @@
+<!--
+@license
+Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../../lib/polymer/polymer.html">
+<link rel="import" href="../ss-facebook-interface/ss-facebook-interface.html"/>
+
+<polymer-element name="ss-photo-selector">
+    <template>
+        <link rel="stylesheet" href="ss-photo-selector.css"/>
+        <ss-facebook-interface id="photoSelector"></ss-facebook-interface>
+        <ul class="photo-list">
+            <template repeat="{{photo in photos}}">
+                <li class="photo-list__item {{ {selected: photo.selected} | tokenList }}" is="list-element" on-click="{{selectPhoto}}">
+                    <img src="{{photo.picture}}" alt="photo"/>
+                </li>
+            </template>
+        </ul>
+    </template>
+    <script>
+        (function() {
+
+            function selectedFilter(array) {
+                return array.filter(function(element) {
+                    return element.selected;
+                });
+            }
+
+            Polymer('ss-photo-selector', {
+                ready: function() {
+                    var _this = this;
+                    this.$.photoSelector.getPhotos(function(photos) {
+                        _this.photos = photos;
+                    });
+                },
+
+                selectPhoto: function(event, details, target) {
+                    target.templateInstance.model.photo.selected = !target.templateInstance.model.photo.selected;
+                    this.fire('change', selectedFilter(this.photos));
+                }
+            });
+        })();
+    </script>
+</polymer-element>

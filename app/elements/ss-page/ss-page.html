@@ -1,9 +1,21 @@
 <link rel="import" href="../../lib/polymer/polymer.html">
+<link rel="import" href="../ss-facebook-interface/ss-facebook-interface.html"/>
+<link rel="import" href="../ss-photo-selector/ss-photo-selector.html"/>
 
-<polymer-element name="ss-page" noscript>
+<polymer-element name="ss-page">
     <template>
         <link rel="stylesheet" href="ss-page.css"/>
-        <h1>Main page</h1>
-        <div>Something interesting here</div>
+        <ss-photo-selector id="photoSelector"></ss-photo-selector>
     </template>
+    <script>
+        (function() {
+            Polymer('ss-page', {
+                ready: function() {
+                    this.$.photoSelector.addEventListener('change', function(event) {
+                        console.info('selectedPhoto list changed: ', event.detail);
+                    });
+                }
+            });
+        })();
+    </script>
 </polymer-element>

@@ -1,0 +1,28 @@
+.photo-list {
+    list-style: none
+    margin: 0
+    padding: 0
+
+    &__item {
+        background: #000
+        float: left
+        margin: 4px
+        cursor: pointer
+        width: 130px
+        height: 80px
+        overflow: hidden
+
+        img {
+            transform: translateY(-50%)
+            position: relative
+            top: 50%
+            display: block
+            opacity: 1
+            transition: opacity 0.1s;
+        }
+
+        &.selected img{
+            opacity: 0.5;
+        }
+    }
+}
