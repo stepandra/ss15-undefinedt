@@ -1,0 +1,71 @@
+<link rel="import" href="../../lib/polymer/polymer.html">
+<link rel="import" href="../ss-soundcloud-interface/ss-soundcloud-interface.html">
+<link rel="import" href="../../lib/paper-input/paper-input.html">
+<link rel="import" href="../../lib/paper-button/paper-button.html">
+<link rel="import" href="../../lib/paper-dropdown/paper-dropdown.html">
+<link rel="import" href="../../lib/paper-item/paper-item.html">
+<link rel="import" href="../../lib/core-collapse/core-collapse.html">
+
+<polymer-element name="ss-music-chooser">
+    <template>
+        <link rel="stylesheet" href="ss-music-chooser.css"/>
+        <div class="container">
+            <paper-input id="artistInput" on-input="{{updateTrackList}}" floatingLabel label="Artist"
+                         value="{{artist}}"></paper-input>
+            <paper-dropdown id="trackList" valign="top" relatedTarget="{{$.artistInput}}">
+                <div class="content">
+                    <template repeat="{{track, i in trackArray}}">
+                        <paper-item on-click="{{selectTrack}}" index="{{i}}">
+                            {{track.title}}
+                        </paper-item>
+                    </template>
+                </div>
+            </paper-dropdown>
+            <paper-button disabled="" id="addButton" on-click="{{onAdd}}" raised>Add</paper-button>
+            <div style="clear: both"></div>
+        </div>
+        <ss-soundcloud-interface id="soundCloudInterface"></ss-soundcloud-interface>
+    </template>
+    <script type="text/javascript">
+        (function () {
+            var selectedTrack = null;
+            var lastTypedTime = 0;
+
+            function getAudioListByArtist(component) {
+                component.$.soundCloudInterface.searchByQuery(component.artist).done(function (data) {
+                    component.trackArray = data;
+                    component.$.trackList.toggle();
+                });
+            }
+
+            Polymer('ss-music-chooser', {
+                artist: '',
+                trackArray: [],
+                updateTrackList: function () {
+                    var me = this;
+                    selectedTrack = null;
+                    this.$.addButton.disabled = true;
+                    if (Date.now() - lastTypedTime > 500)
+                        getAudioListByArtist(this);
+                    else
+                        setTimeout(function () {
+                            if (Date.now() - lastTypedTime > 500)
+                                getAudioListByArtist(me);
+                        }, 500);
+                    lastTypedTime = Date.now();
+                },
+                selectTrack: function(event, detail, target) {
+                    selectedTrack = this.trackArray[target.getAttribute('index')];
+                    this.$.addButton.disabled = false;
+                    this.artist = selectedTrack.title;
+                    this.$.trackList.toggle();
+                },
+                onAdd: function () {
+                    if (!selectedTrack) return;
+                    console.log('ss-music-chooser::track-selected');
+                    this.fire('track-selected', selectedTrack);
+                }
+            });
+        })();
+    </script>
+</polymer-element>
