@@ -3,6 +3,8 @@
 
 <polymer-element name="ss-menu" extends="core-menu" noscript>
     <script type="text/javascript">
+        //Problem with ready method of polymer-element, just add it and you will see that your core-items
+        //is no longer with bold. Even if you run this.super() method
         'use strict';
         document.addEventListener("polymer-ready", function () {
             var menuItems = document.querySelectorAll("core-item > a");
