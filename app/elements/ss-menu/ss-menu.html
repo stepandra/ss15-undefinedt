@@ -5,9 +5,9 @@
     <script type="text/javascript">
         'use strict';
         document.addEventListener("polymer-ready", function () {
-            var menu_items = document.querySelectorAll("core-item > a");
-            for (var i = 0; i < menu_items.length; ++i) {
-                if (menu_items[i].getAttribute("href") == location.hash) {
+            var menuItems = document.querySelectorAll("core-item > a");
+            for (var i = 0; i < menuItems.length; ++i) {
+                if (menuItems[i].getAttribute("href") == location.hash) {
                     document.querySelector("ss-menu").setAttribute("selected", i.toString());
                     break;
                 }
