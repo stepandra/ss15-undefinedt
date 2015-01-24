@@ -10,6 +10,6 @@
     "core-icons": "Polymer/core-icons#latest",
     "core-elements":"Polymer/core-elements#latest",
     "paper-elements":"Polymer/paper-elements#latest",
-    "q": "latest"
+    "q": "q#1.0.1"
   }
 }
