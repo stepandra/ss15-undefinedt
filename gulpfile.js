@@ -9,7 +9,7 @@ gulp.task('webserver', function() {
         .pipe(webserver({
             livereload: true,
             open: true,
-            host: '0.0.0.0'
+            host: 'ss15-undefinedt.divshot.io'
         }));
 });
 
