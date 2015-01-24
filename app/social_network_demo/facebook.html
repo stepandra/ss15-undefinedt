@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="http://code.jquery.com/jquery-1.7.2.js"></script>
+  <script>
+    var url = 'https://graph.facebook.com/me/albums?fields=picture&access_token=CAAKeJZAEoxZBEBAObOIy86YPOm71ZBXPdvBkBg4ZBjI72ZAtvqQsl70WzpzZBhSOzA5XScREhrGis80vRQxYztnDg8oTAlqWuy6zqV9bcZCK7AvZBGjPIzRxpYVPhHvNosqNrZB9ShfQQpgUMet3eswEEdACXjr1dS4B8O5W60kpL2K0oAPxwPZBt02Vm5JlmHOz0XkD0Ii2F0TA6HWPFGjRuHJX73BSfxRcUZD';
+    // var url = 'https://graph.facebook.com/me/picture?redirect=0&height=200&type=normal&width=200&access_token=CAAKeJZAEoxZBEBAObOIy86YPOm71ZBXPdvBkBg4ZBjI72ZAtvqQsl70WzpzZBhSOzA5XScREhrGis80vRQxYztnDg8oTAlqWuy6zqV9bcZCK7AvZBGjPIzRxpYVPhHvNosqNrZB9ShfQQpgUMet3eswEEdACXjr1dS4B8O5W60kpL2K0oAPxwPZBt02Vm5JlmHOz0XkD0Ii2F0TA6HWPFGjRuHJX73BSfxRcUZD';
+    $.getJSON(url, function (response) {
+      for (var i = response.data.length - 1; i >= 0; i--) {
+        console.log(response.data[i].picture.data.url);
+      }
+
+    });
+  </script>
+  <meta charset="utf-8">
+  <title>Facebook</title>
+</head>
+<body>
+</body>
+</html>

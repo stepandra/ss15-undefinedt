@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="http://code.jquery.com/jquery-1.7.2.js"></script>
+  <script>
+    function search() {
+      var query = document.getElementById('query').value;
+      var url = 'http://api.soundcloud.com/tracks?q=' + query + '&license=cc-by-sa&client_id=478532b9d8da858e21e34cb10ec3184e&format=json';
+
+      $.getJSON(url, function (response) {
+        console.log(response);
+        for (var i = response.length - 1; i >= 0; i--) {
+          console.log(response[i].stream_url);
+        }
+      });
+    }
+  </script>
+  <meta charset="utf-8">
+  <title>JS Bin</title>
+</head>
+<body>
+<h1>Search query</h1>
+<input type="text" id="query">
+<input type="submit" onclick="search();">
+
+<p></p> <!--genius margin-->
+<audio controls>
+  <source src="http://api.soundcloud.com/tracks/148976759/stream?client_id=478532b9d8da858e21e34cb10ec3184e"
+          type="audio/mpeg"/>
+</audio>
+</body>
+</html>
