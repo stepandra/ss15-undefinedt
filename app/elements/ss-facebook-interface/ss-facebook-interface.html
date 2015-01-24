@@ -1,0 +1,92 @@
+<!--
+@license
+Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../../lib/polymer/polymer.html">
+
+<polymer-element name="ss-facebook-interface">
+    <script>
+        (function() {
+            var enableDeferred = Q.defer();
+            Polymer('ss-facebook-interface', {
+                _checkStatus: function() {
+                    var _this = this;
+                    FB.getLoginStatus(function(response) {
+                        _this._statusChangeCallback(response);
+                    });
+                },
+                _statusChangeCallback: function(response) {
+                    switch (response.status) {
+                        case "connected":
+                            enableDeferred.resolve();
+                            break;
+                        case "not_authorized":
+                            FB.login(function(data){
+                                console.log(data);
+                                enableDeferred.resolve();
+                            }, {scope: 'user_photo'});
+                            break;
+
+                        default:
+                            alert('please login in facebook');
+                            FB.login(function(data){
+                                console.log(data);
+                                enableDeferred.resolve();
+                            }, {scope: 'user_photo'});
+                    }
+                },
+                ready: function() {
+                    var _this = this;
+                    window.fbAsyncInit = function() {
+                        FB.init({
+                            appId      : '807594479313739',
+                            xfbml      : true,
+                            version    : 'v2.2',
+                            status     : true
+                        });
+
+                        _this._checkStatus();
+                    };
+
+                    (function(d, s, id){
+                        var js, fjs = d.getElementsByTagName(s)[0];
+                        if (d.getElementById(id)) {return;}
+                        js = d.createElement(s); js.id = id;
+                        js.src = "//connect.facebook.net/en_US/sdk.js";
+                        fjs.parentNode.insertBefore(js, fjs);
+                    }(document, 'script', 'facebook-jssdk'));
+                },
+
+                getUserInfo: function(successCallback, errorCallback) {
+                    enableDeferred.promise.then(function(){
+                        FB.api('/me', function(response) {
+                            if (response && !response.error) {
+                                successCallback(response.data);
+                            } else {
+                                errorCallback();
+                            }
+                        });
+                    });
+                },
+
+                getPhotos: function(successCallback, errorCallback) {
+                    enableDeferred.promise.then(function() {
+                        FB.api('/me/photos/uploaded', function(response) {
+                            if (response && !response.error) {
+                                successCallback(response.data);
+                            } else {
+                                errorCallback();
+                            }
+                        });
+                    });
+                }
+            });
+        })();
+    </script>
+</polymer-element>

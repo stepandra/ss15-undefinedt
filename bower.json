@@ -3,7 +3,6 @@
   "description": "SlideShow on canvas with social integration",
   "version": "0.0.0",
   "dependencies": {
-    "platform": "Polymer/platform#latest",
     "polymer": "Polymer/polymer#latest",
     "webcomponentsjs": "latest",
     "app-router": "latest",
