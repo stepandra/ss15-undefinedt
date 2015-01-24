@@ -17,12 +17,16 @@ gulp.task('stylus', function () {
     gulp.src('./app/elements/**/*.styl')
         .pipe(stylus())
         .pipe(gulp.dest('./app/elements/'));
+
+    gulp.src('./app/stylus/main.styl')
+        .pipe(stylus())
+        .pipe(gulp.dest('./app/css/'));
 });
 
 gulp.task('default', function () {
     gulp.run(['webserver', 'stylus']);
 
-    gulp.watch("./app/elements/**/*.styl", function(){
+    gulp.watch("./app/**/*.styl", function(){
         gulp.run('stylus');
     });
 });
