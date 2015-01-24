@@ -1,0 +1,17 @@
+<link rel="import" href="../../lib/polymer/polymer.html">
+<link rel="import" href="../../lib/core-menu/core-menu.html">
+
+<polymer-element name="ss-menu" extends="core-menu" noscript>
+    <script type="text/javascript">
+        'use strict';
+        document.addEventListener("polymer-ready", function () {
+            var menuItems = document.querySelectorAll("core-item > a");
+            for (var i = 0; i < menuItems.length; ++i) {
+                if (menuItems[i].getAttribute("href") == location.hash) {
+                    document.querySelector("ss-menu").setAttribute("selected", i.toString());
+                    break;
+                }
+            }
+        })
+    </script>
+</polymer-element>
