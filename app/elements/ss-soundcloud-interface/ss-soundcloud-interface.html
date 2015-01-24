@@ -15,31 +15,35 @@
                 on-core-error="{{handleError}}"></core-ajax>
     </template>
     <script type="text/javascript">
-        Polymer('ss-soundcloud-interface', {
-            soundCloud: {
-                id: '478532b9d8da858e21e34cb10ec3184e',
-                format: 'json',
-                license: 'cc-by-sa'
-            },
-            query: '',
-            dfd: null,
-            searchByQuery: function(query) {
-                if (query === '') throw new Error('Query cannot be empty');
-                this.query = query;
-                this.dfd = Q.defer();
-                this.$.searchByQuery.go();
-                return this.dfd.promise;
-            },
-            handleResponse: function(event, data) {
-                if (this.dfd === null) throw new Error("Cannot handle empty request");
-                this.dfd.resolve(data.response);
-                this.dfd = null;
-            },
-            handleError: function(event) {
-                if (this.dfd === null) throw new Error("Cannot handle empty request");
-                this.dfd.reject(event);
-                this.dfd = null;
-            }
-        });
+        (function () {
+            "use strict";
+
+            Polymer('ss-soundcloud-interface', {
+                soundCloud: {
+                    id: '478532b9d8da858e21e34cb10ec3184e',
+                    format: 'json',
+                    license: 'cc-by-sa'
+                },
+                query: '',
+                dfd: null,
+                searchByQuery: function(query) {
+                    if (query === '') throw new Error('Query cannot be empty');
+                    this.query = query;
+                    this.dfd = Q.defer();
+                    this.$.searchByQuery.go();
+                    return this.dfd.promise;
+                },
+                handleResponse: function(event, data) {
+                    if (this.dfd === null) throw new Error("Cannot handle empty request");
+                    this.dfd.resolve(data.response);
+                    this.dfd = null;
+                },
+                handleError: function(event) {
+                    if (this.dfd === null) throw new Error("Cannot handle empty request");
+                    this.dfd.reject(event);
+                    this.dfd = null;
+                }
+            });
+        })();
     </script>
 </polymer-element>
