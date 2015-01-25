@@ -1,0 +1,32 @@
+<link rel="import" href="../../lib/polymer/polymer.html">
+<link rel="import" href="../../lib/core-icons/core-icons.html">
+<link rel="import" href="ss-control-fullscreen/ss-control-fullscreen.html">
+<link rel="import" href="ss-control-sound/ss-control-sound.html"/>
+
+
+<polymer-element name="ss-player">
+    <template>
+        <link rel="stylesheet" href="ss-player.css"/>
+        <canvas id="slideShowContent"></canvas>
+        <ss-control-fullscreen id="fullscreenController" expandImgSrc="elements/ss-player/images/expand.svg"
+                               collapseImgSrc="elements/ss-player/images/collapse.svg"></ss-control-fullscreen>
+        <ss-control-sound mutedImgSrc="elements/ss-player/images/muted.svg" loudImgSrc="elements/ss-player/images/loud.svg"></ss-control-sound>
+        <paper-icon-button src="images/previous.svg"></paper-icon-button>
+        <paper-icon-button src="images/next.svg"></paper-icon-button>
+        <paper-icon-button src="images/pause.svg"></paper-icon-button>
+        <paper-icon-button src="images/play.svg"></paper-icon-button>
+    </template>
+    <script type="text/javascript">
+        'use strict';
+        (function () {
+            Polymer({
+                ready: function () {
+                    this.$.fullscreenController.init(this);
+                },
+                init: function (data) {
+
+                }
+            })
+        })()
+    </script>
+</polymer-element>
