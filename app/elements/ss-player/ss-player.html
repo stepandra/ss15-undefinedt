@@ -18,6 +18,9 @@
         <paper-icon-button src="images/next.svg"></paper-icon-button>
         <ss-control-fullscreen id="fullscreenController" expandImgSrc="elements/ss-player/images/expand.svg"
                                collapseImgSrc="elements/ss-player/images/collapse.svg"></ss-control-fullscreen>
+        <template if="{{progress >= 0}}">
+            {{progress}}%
+        </template>
     </template>
     <script type="text/javascript">
         'use strict';
@@ -28,19 +31,72 @@
                 },
                 initialize: function (data) {
                     var _this = this;
-                    _this.photos = [];
-                    data.photos.forEach(function(element) {
-                        var image = new Image();
-                        image.src = element.source;
-                        _this.photos.push(image);
-                    });
+                    _this.progress = 0;
 
-                    _this.$.slideShowContent.initialize({
-                        images: _this.photos,
-                        parameters: {
-                            slideTime: 5000
-                        }
+                    this.loadPhotos(data.photos).then(function(photos) {
+                        _this.$.slideShowContent.initialize({
+                            images: photos,
+                            parameters: {
+                                slideTime: 2500
+                            }
+                        });
+                    }, function(message) {
+                        console.error(message);
                     });
+                },
+
+                loadPhotos: function(photos) {
+                    var _this = this;
+                    var deferred = Q.defer();
+                    var result = [];
+                    var loaded = 0;
+                    var startLoaded = 0;
+
+                    for (var i = 0; i < 3 && i < photos.length; i++) {
+                        load(i);
+                    }
+
+                    function load(index) {
+                        var photo = new Image();
+
+                        photo.addEventListener('load', onLoad);
+                        photo.addEventListener('error', onError);
+
+                        photo.src = photos[index].source;
+
+                        startLoaded++;
+                    }
+
+                    function onLoad() {
+                        loaded++;
+                        _this.progress = parseInt(loaded / photos.length * 100);
+                        result.push(this);
+                        if (startLoaded < photos.length) {
+                            load(startLoaded);
+                        }
+                        if (loaded === photos.length) {
+                            if (result.length < photos.length * 0.5) {
+                                if (result.length === 0) {
+                                    deferred.reject("Error while loading photos");
+                                } else {
+                                    deferred.reject("Error while loading photos. Only " + result.length + " of " + photos.length + " loaded.");
+                                }
+                            } else {
+                                deferred.resolve(result);
+                            }
+                        }
+                    }
+
+                    function onError() {
+                        loaded++;
+                        console.warn('error when loading image', this.src);
+                        _this.progress = parseInt(loaded / photos.length * 100);
+                        if (startLoaded < photos.length) {
+                            load(startLoaded);
+                        }
+                    }
+
+                    return deferred.promise;
                 }
             })
         })()

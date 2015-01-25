@@ -24,7 +24,7 @@
                     this.$.photoSelector.addEventListener('change', function(event) {
                         console.info('selectedPhoto list changed: ', event.detail);
                         me.$.timeline.addImages(event.detail);
-                        if (event.detail.length > 2) {
+                        if (event.detail.length > 3) {
                             me.$.player.initialize({
                                 photos: event.detail
                             });
