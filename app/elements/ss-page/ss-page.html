@@ -8,7 +8,7 @@
 <polymer-element name="ss-page">
     <template>
         <link rel="stylesheet" href="ss-page.css"/>
-        <ss-player></ss-player>
+        <ss-player id="player"></ss-player>
         <ss-music-chooser id="musicChooser"></ss-music-chooser>
         <ss-photo-selector id="photoSelector"></ss-photo-selector>
         <ss-timeline id="timeline"></ss-timeline>
@@ -24,6 +24,11 @@
                     this.$.photoSelector.addEventListener('change', function(event) {
                         console.info('selectedPhoto list changed: ', event.detail);
                         me.$.timeline.addImages(event.detail);
+                        if (event.detail.length > 2) {
+                            me.$.player.initialize({
+                                photos: event.detail
+                            });
+                        }
                     });
                 }
             });

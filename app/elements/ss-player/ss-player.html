@@ -29,16 +29,16 @@
                 initialize: function (data) {
                     var _this = this;
                     _this.photos = [];
-                    data.photos.forEach(function() {
+                    data.photos.forEach(function(element) {
                         var image = new Image();
-                        image.src = data.photos.source;
+                        image.src = element.source;
                         _this.photos.push(image);
                     });
 
                     _this.$.slideShowContent.initialize({
                         images: _this.photos,
                         parameters: {
-                            slideTime: 3000
+                            slideTime: 5000
                         }
                     });
                 }

@@ -2,7 +2,7 @@
 
 <polymer-element name="ss-canvas">
     <template>
-        <canvas id="canvas"></canvas>
+        <canvas width="600" height="500" id="canvas"></canvas>
     </template>
     <script type="text/javascript">
         'use strict';
@@ -11,7 +11,7 @@
             Polymer({
                 ready: function() {
                     this.canvas = this.$.canvas;
-                    this.context = this.canvas;
+                    this.context = this.canvas.getContext('2d');
                 },
 
                 initialize: function(options) {
@@ -19,7 +19,6 @@
                     this.images = options.images;
                     this.paused = 0;
                     this.played = false;
-                    this.totalTime = this.parameters.slideTime + this.parameters.transitionTime;
 
                     this.initialized = true;
 
@@ -31,6 +30,8 @@
                     this.type = options.type || 'defaultType';
 
                     this[this.type].init(this.parameters.slideTime);
+
+                    this.play();
                 },
 
                 _render: function(currentSlideTime) {
@@ -38,14 +39,15 @@
 
                     var animationObject = this[this.type].func(
                             this.animationState.currentSlide,
-                            currentTime,
-                            this.totalTime,
                             currentSlideTime,
+                            this.parameters.slideTime,
                             this.images,
                             this.canvas
                     );
 
-                    this._draw(this.images[this.animationState.currentSlide], animationObject);
+                    for (var key in animationObject) {
+                        this._draw(this.images[key], animationObject[key]);
+                    }
                 },
 
                 _step: function(time) {
@@ -90,35 +92,39 @@
                 },
 
                 defaultType: {
-                    func: function(currentSlide, currentTime, totalTime, slideTime, images, canvas) {
+                    func: function(currentSlide, currentSlideTime, slideTime, images, canvas) {
                         var result = {};
 
-                        result[currentSlide] = {};
                         result[currentSlide + 1] = {};
 
-                        if (currentSlideTime - this.hideDuration < 0) {
-                            result[currentSlide].opacity = this.timingValue(currentSlideTime, this.hideDuration, 1, 0);
-                            result[currentSlide].scale = this.timingValue(currentSlideTime + slideTime, totalTime, 1, this.scale);
-                            result[currentSlide + 1].opacity = this.timingValue(currentSlideTime, this.hideDuration, 1, 0);
-                        }
+                        if (currentSlideTime > slideTime - this.hideDuration) {
+                            console.log(currentSlideTime, this.hideDuration);
+                            var scale = this.timingValue(currentSlideTime + slideTime, slideTime, 1, this.scale);
 
-                        result[currentSlide + 1].scale = this.timingValue(currentSlideTime, totalTime, 1, this.scale);
+                            result[currentSlide] = {
+                                opacity: this.timingValue(currentSlideTime, this.hideDuration, 1, 0),
+                                scale: scale,
+                                x: (canvas.width/scale - images[currentSlide].width)/2,
+                                y: (canvas.height/scale - images[currentSlide].height)/2
+                            };
+                            result[currentSlide + 1].opacity = this.timingValue(currentSlideTime, this.hideDuration, 0, 1);}
 
-                        result[currentSlide].x = (canvas.width/result[currentSlide].scale - images[currentSlide].width)/2;
-                        result[currentSlide].y = (canvas.height/result[currentSlide].scale - images[currentSlide].height)/2;
+                        result[currentSlide + 1].scale = this.timingValue(currentSlideTime, slideTime, 1, this.scale);
                         result[currentSlide+1].x = (canvas.width/result[currentSlide+1].scale - images[currentSlide+1].width)/2;
                         result[currentSlide+1].y = (canvas.height/result[currentSlide+1].scale - images[currentSlide+1].height)/2;
+
+                        return result;
                     },
 
-                    timingValue: function(currentTime, endTime, startValue, endValue) {
-                        return startValue + currentTime/endTime * (endValue - startValue);
+                    timingValue: function(currentSlideTime, endTime, startValue, endValue) {
+                        return startValue + currentSlideTime/endTime * (endValue - startValue);
                     },
 
                     init: function(slideTime) {
                         this.hideDuration = slideTime * 0.15;
                     },
 
-                    scale: 1.2
+                    scale: 1.4
                 }
             });
         })()
