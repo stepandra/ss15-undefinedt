@@ -47,13 +47,15 @@
                     this.$.saveFab.disabled = false;
                 },
                 save: function() {
+                    var me = this;
                     var data = {
                         images: this.images,
                         tracks: [this.track]
                     };
                     this.$.saveFab.disabled = true;
                     this.$.parseInterface.saveSlides(data).then(function (data) {
-                        triggerEvent(this, 'slides-saved', data);
+                        triggerEvent(me, 'slides-saved', data);
+                        location.hash = "#/watch/" + data.objectId;
                     });
                     triggerEvent(this, 'save-started', data);
                 }

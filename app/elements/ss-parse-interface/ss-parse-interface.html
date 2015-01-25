@@ -23,12 +23,11 @@
                 "X-Parse-REST-API-Key": PARSE_REST_API_KEY
             };
 
-            Polymer({
+            Polymer('ss-parse-interface', {
                 body: '',
                 saveSlides: function (data) {
                     dfd = Q.defer();
                     this.body = data;
-                    console.log(this.body);
                     this.$.saveToSlides.go();
                     return dfd.promise;
                 },
