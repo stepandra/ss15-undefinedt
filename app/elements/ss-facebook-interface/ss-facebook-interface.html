@@ -16,10 +16,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             var enableDeferred = Q.defer();
             Polymer('ss-facebook-interface', {
                 checkStatus: function() {
-                    var _this = this;
-                    FB.getLoginStatus(function(response) {
-                        _this._statusChangeCallback(response);
-                    });
+                    FB.getLoginStatus(this._statusChangeCallback);
                 },
                 _statusChangeCallback: function(response) {
                     switch (response.status) {
