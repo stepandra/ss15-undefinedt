@@ -45,6 +45,7 @@
                     if (!this.soundMuted) {
                         this.soundVolumeLocalStorage = this.soundVolume;
                     }
+                    this.asyncFire('on-volume-change', this.soundVolume);
                 }
             })
         })()
