@@ -65,7 +65,12 @@
                 addImages: function (images) {
                     this.images = images || [];
                     this.$.timeline.classList.add("active");
-                    this.$.saveFab.disabled = (this.images.length === 0 && !this.track);
+                    if (this.images.length === 0 && !this.track) {
+                        this.$.saveFab.disabled = true;
+                        this.$.timeline.classList.remove("active");
+                    } else {
+                        this.$.saveFab.disabled = false;
+                    }
                 },
                 save: function () {
                     var me = this;

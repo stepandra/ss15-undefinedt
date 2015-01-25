@@ -83,6 +83,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     var index = this.selectedPhotos.indexOf(photo);
                     if (index !== -1) {
                         this.selectedPhotos.splice(index, 1);
+                        photo.selected = false;
                     } else {
                         console.warn(photo, ' not found');
                     }
