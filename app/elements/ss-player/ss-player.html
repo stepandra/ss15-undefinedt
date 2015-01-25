@@ -3,12 +3,13 @@
 <link rel="import" href="ss-control-fullscreen/ss-control-fullscreen.html">
 <link rel="import" href="ss-control-sound/ss-control-sound.html"/>
 <link rel="import" href="ss-control-play/ss-control-play.html"/>
+<link rel="import" href="ss-canvas/ss-canvas.html"/>
 
 
 <polymer-element name="ss-player">
     <template>
         <link rel="stylesheet" href="ss-player.css"/>
-        <canvas id="slideShowContent"></canvas>
+        <ss-canvas id="slideShowContent"></ss-canvas>
         <ss-control-sound mutedImgSrc="elements/ss-player/images/muted.svg"
                           loudImgSrc="elements/ss-player/images/loud.svg"></ss-control-sound>
         <paper-icon-button src="images/previous.svg"></paper-icon-button>
@@ -25,8 +26,21 @@
                 ready: function () {
                     this.$.fullscreenController.init(this);
                 },
-                init: function (data) {
+                initialize: function (data) {
+                    var _this = this;
+                    _this.photos = [];
+                    data.photos.forEach(function(element) {
+                        var image = new Image();
+                        image.src = element.source;
+                        _this.photos.push(image);
+                    });
 
+                    _this.$.slideShowContent.initialize({
+                        images: _this.photos,
+                        parameters: {
+                            slideTime: 5000
+                        }
+                    });
                 }
             })
         })()
