@@ -41,47 +41,53 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                             }, {scope: 'user_photos'});
                     }
                 },
+
                 ready: function() {
                     var _this = this;
-                    window.fbAsyncInit = function() {
-                        FB.init({
-                            appId      : '807594479313739',
-                            xfbml      : true,
-                            version    : 'v2.2',
-                            status     : true
-                        });
 
-                        _this._checkStatus();
-                    };
+                    if (!window.fbAsyncInit) {
+                        window.fbAsyncInit = function() {
+                            FB.init({
+                                appId      : '807594479313739',
+                                xfbml      : true,
+                                version    : 'v2.2',
+                                status     : true
+                            });
 
-                    (function(d, s, id){
-                        var js, fjs = d.getElementsByTagName(s)[0];
-                        if (d.getElementById(id)) {return;}
-                        js = d.createElement(s); js.id = id;
-                        js.src = "//connect.facebook.net/en_US/sdk.js";
-                        fjs.parentNode.insertBefore(js, fjs);
-                    }(document, 'script', 'facebook-jssdk'));
+                            _this._checkStatus();
+                        };
+
+                        (function(d, s, id){
+                            var js, fjs = d.getElementsByTagName(s)[0];
+                            if (d.getElementById(id)) {return;}
+                            js = d.createElement(s); js.id = id;
+                            js.src = "//connect.facebook.net/en_US/sdk.js";
+                            fjs.parentNode.insertBefore(js, fjs);
+                        }(document, 'script', 'facebook-jssdk'));
+                    }
                 },
 
                 getUserInfo: function(successCallback, errorCallback) {
                     enableDeferred.promise.then(function(){
                         FB.api('/me', function(response) {
                             if (response && !response.error) {
-                                successCallback(response.data);
+                                successCallback(response);
                             } else {
-                                errorCallback();
+                                console.error(response);
+                                errorCallback && errorCallback();
                             }
                         });
                     });
                 },
 
-                getPhotos: function(successCallback, errorCallback) {
+                getData: function(url, successCallback, errorCallback) {
                     enableDeferred.promise.then(function() {
-                        FB.api('/me/photos/uploaded', function(response) {
+                        FB.api(url, function(response) {
                             if (response && !response.error) {
                                 successCallback(response.data);
                             } else {
-                                errorCallback();
+                                console.error(response);
+                                errorCallback && errorCallback();
                             }
                         });
                     });

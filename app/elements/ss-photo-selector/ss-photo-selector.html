@@ -10,18 +10,41 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="../../lib/polymer/polymer.html">
 <link rel="import" href="../ss-facebook-interface/ss-facebook-interface.html"/>
+<link rel="import" href="../../lib/paper-dropdown-menu/paper-dropdown-menu.html"/>
+<link rel="import" href="../../lib/paper-dropdown/paper-dropdown.html"/>
+<link rel="import" href="../../lib/paper-item/paper-item.html"/>
+<link rel="import" href="../../lib/core-menu/core-menu.html"/>
 
 <polymer-element name="ss-photo-selector">
     <template>
         <link rel="stylesheet" href="ss-photo-selector.css"/>
-        <ss-facebook-interface id="photoSelector"></ss-facebook-interface>
-        <ul class="photo-list">
-            <template repeat="{{photo in photos}}">
-                <li class="photo-list__item {{ {selected: photo.selected} | tokenList }}" is="list-element" on-click="{{selectPhoto}}">
-                    <img src="{{photo.picture}}" alt="photo"/>
-                </li>
-            </template>
-        </ul>
+        <ss-facebook-interface id="FBInterface"></ss-facebook-interface>
+        <header class="header">
+            <paper-dropdown-menu label="Choice album" class="drop-down">
+                <paper-dropdown class="dropdown">
+                    <core-menu class="menu">
+                        <template repeat="{{album in albums}}">
+                            <paper-item on-click="{{loadPhotos}}" url="/{{album.id}}/photos">{{album.name}}</paper-item>
+                        </template>
+                        <paper-item on-click="{{loadPhotos}}" url="/me/photos">Tagged in photos</paper-item>
+                        <paper-item on-click="{{loadPhotos}}" url="/me/photos/uploaded">Uploaded photos</paper-item>
+                    </core-menu>
+                </paper-dropdown>
+            </paper-dropdown-menu>
+            <h2 class="user-name">{{user.first_name}} {{user.last_name}}</h2>
+        </header>
+        <content>
+            <ul class="photo-list">
+                <template repeat="{{photo in photos}}">
+                    <li class="photo-list__item {{ {selected: photo.selected} | tokenList }}" is="list-element" on-click="{{selectPhoto}}">
+                        <img src="{{photo.picture}}" alt="photo"/>
+                    </li>
+                </template>
+                <template if="{{ !photos.length }}">
+                    Сышь ты, Чепушила... Тут нету фоток
+                </template>
+            </ul>
+        </content>
     </template>
     <script>
         (function() {
@@ -35,14 +58,30 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             Polymer('ss-photo-selector', {
                 ready: function() {
                     var _this = this;
-                    this.$.photoSelector.getPhotos(function(photos) {
-                        _this.photos = photos;
+
+                    this.interface = this.$.FBInterface;
+
+                    this.interface.getData('/me/albums', function(albums) {
+                        _this.albums = albums;
+                    });
+
+                    this.interface.getUserInfo(function(user) {
+                        _this.user = user;
                     });
                 },
 
                 selectPhoto: function(event, details, target) {
                     target.templateInstance.model.photo.selected = !target.templateInstance.model.photo.selected;
                     this.fire('change', selectedFilter(this.photos));
+                },
+
+                loadPhotos: function(event, detail, target) {
+                    var _this = this;
+                    var url = target.getAttribute('url');
+
+                    _this.interface.getData(url, function(photos) {
+                        _this.photos = photos;
+                    });
                 }
             });
         })();
