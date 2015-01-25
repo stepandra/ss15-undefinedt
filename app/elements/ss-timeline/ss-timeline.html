@@ -18,7 +18,7 @@
                     <span class="time">{{track.formattedTime}}</span>
                 </div>
             </template>
-            <paper-fab icon="add"></paper-fab>
+            <paper-fab id="saveFab" on-tap="{{save}}" icon="add"></paper-fab>
         </div>
     </template>
     <script type="text/javascript">
@@ -44,13 +44,20 @@
                     this.track = track || {};
                     this.track.formattedTime = toHHMMSS(this.track.duration);
                     this.$.timeline.classList.add("active");
+                    this.$.saveFab.disabled = false;
                 },
                 addImages: function (images) {
                     this.images = images || [];
                     this.$.timeline.classList.add("active");
+                    this.$.saveFab.disabled = false;
                 },
                 save: function() {
-
+                    this.$.saveFab.disabled = true;
+                    console.log('ss-timeline::save-started');
+                    this.fire('save-started', {
+                        images: this.images,
+                        tracks: this.track
+                    });
                 }
             });
         })();
