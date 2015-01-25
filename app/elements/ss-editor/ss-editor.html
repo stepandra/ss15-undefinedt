@@ -23,6 +23,9 @@
                         console.info('selectedPhoto list changed: ', event.detail);
                         me.$.timeline.addImages(event.detail);
                     });
+                    this.$.timeline.addEventListener('remove-image', function (event) {
+                        me.$.photoSelector.removePhoto(event.detail);
+                    });
                 }
             });
         })();

@@ -8,8 +8,8 @@
         <link rel="stylesheet" href="ss-timeline.css">
         <div id="timeline" class="timeline">
             <div class="images">
-                <template repeat="{{image in images}}">
-                    <div class="image">
+                <template repeat="{{image, i in images}}">
+                    <div class="image" on-tap="{{removeImage}}" index="{{i}}">
                         <img src="{{image.picture}}">
                     </div>
                 </template>
@@ -96,6 +96,10 @@
                     var newTime = Math.floor(this.$.trackPreview.currentTime) * 1000;
                     this.time = toHHMMSS(newTime);
                     this.playedProgress = (newTime / this.track.duration) * 100;
+                },
+                removeImage: function (event, details, target) {
+                    var idx = parseInt(target.getAttribute('index'));
+                    triggerEvent(this, 'remove-image', this.images[idx]);
                 }
             });
         })();
