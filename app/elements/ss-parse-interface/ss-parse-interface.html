@@ -9,7 +9,8 @@
                    method="post"
                    headers="{{headers}}"
                    body="{{body | stringify}}"
-                   on-core-response="{{saveSlidesSuccess}}"></core-ajax>
+                   on-core-response="{{saveSlidesSuccess}}"
+                   on-core-error="{{saveSlidesError}}"></core-ajax>
     </template>
     <script type="text/javascript">
         (function () {
@@ -34,6 +35,11 @@
                 saveSlidesSuccess: function (event, data) {
                     if (dfd === null) throw new Error("Cannot complete empty request");
                     dfd.resolve(data.response);
+                    dfd = null;
+                },
+                saveSlidesError: function (event) {
+                    if (dfd === null) throw new Error("Cannot complete empty request");
+                    dfd.reject(event);
                     dfd = null;
                 },
                 get headers() {
