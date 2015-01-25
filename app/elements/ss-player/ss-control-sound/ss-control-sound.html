@@ -9,7 +9,7 @@
         <link rel="stylesheet" href="ss-control-sound.css"/>
         <core-localstorage name="Sound volume" value="{{soundVolumeLocalStorage}}"></core-localstorage>
         <core-localstorage name="Sound muted" value="{{soundMuted}}"
-                           core-localstorage-load="{{localStorageDidLoad}}"></core-localstorage>
+                           core-localstorage-load="{{localStorageDidLoad(event)}}"></core-localstorage>
         <template if="{{soundVolume > 0 }}">
             <paper-icon-button id="muteButton" on-click="{{muteButtonClick}}" src="{{loudImgSrc}}"></paper-icon-button>
         </template>
@@ -27,9 +27,8 @@
                 soundVolume: 100,
                 soundVolumeLocalStorage: 100,
                 soundMuted: false,
-                audio: new Audio(),
-                localStorageDidLoad: function (po) {
-                    if (!this.soundMuted) {
+                localStorageDidLoad: function (event) {
+                    if (this.soundMuted === false) {
                         this.soundVolume = this.soundVolumeLocalStorage;
                     }
                     console.log("loll")
@@ -46,6 +45,7 @@
                     if (!this.soundMuted) {
                         this.soundVolumeLocalStorage = this.soundVolume;
                     }
+                    this.asyncFire('volume-change', this.soundVolume);
                 }
             })
         })()

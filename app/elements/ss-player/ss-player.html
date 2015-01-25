@@ -10,22 +10,27 @@
     <template>
         <link rel="stylesheet" href="ss-player.css"/>
         <ss-canvas id="slideShowContent"></ss-canvas>
-        <ss-control-sound mutedImgSrc="elements/ss-player/images/muted.svg"
-                          loudImgSrc="elements/ss-player/images/loud.svg"></ss-control-sound>
-        <paper-icon-button src="images/previous.svg"></paper-icon-button>
-        <ss-control-play playImgSrc="elements/ss-player/images/play.svg"
-                         stopImgSrc="elements/ss-player/images/pause.svg"></ss-control-play>
-        <paper-icon-button src="images/next.svg"></paper-icon-button>
-        <ss-control-fullscreen id="fullscreenController" expandImgSrc="elements/ss-player/images/expand.svg"
-                               collapseImgSrc="elements/ss-player/images/collapse.svg"></ss-control-fullscreen>
-        <template if="{{progress >= 0}}">
-            {{progress}}%
-        </template>
+        <div id="controlSet">
+            <ss-control-sound on-volume-change="{{volumeChanged}}"
+                              mutedImgSrc="elements/ss-player/images/muted.svg"
+                              loudImgSrc="elements/ss-player/images/loud.svg"></ss-control-sound>
+            <paper-icon-button src="images/previous.svg"></paper-icon-button>
+            <ss-control-play on-play="{{playMusic(element)}}" on-stop="{{pauseMusic}}"
+                             playImgSrc="elements/ss-player/images/play.svg"
+                             stopImgSrc="elements/ss-player/images/pause.svg"></ss-control-play>
+            <paper-icon-button src="images/next.svg"></paper-icon-button>
+            <ss-control-fullscreen id="fullscreenController" expandImgSrc="elements/ss-player/images/expand.svg"
+                                   collapseImgSrc="elements/ss-player/images/collapse.svg"></ss-control-fullscreen>
+            <template if="{{progress >= 0}}">
+                {{progress}}%
+            </template>
+        </div>
     </template>
     <script type="text/javascript">
         'use strict';
         (function () {
             Polymer({
+                audio: new Audio(),
                 ready: function () {
                     this.$.fullscreenController.init(this);
                 },
@@ -42,9 +47,11 @@
                         });
                         console.error(message);
                     });
+
+                    this.audio.src = data.tracks[0].stream_url;
                 },
 
-                loadPhotos: function(photos) {
+                loadPhotos: function (photos) {
                     var _this = this;
                     var deferred = Q.defer();
                     var result = [];
@@ -96,6 +103,15 @@
                     }
 
                     return deferred.promise;
+                },
+                playMusic: function () {
+                    this.audio.play();
+                },
+                pauseMusic: function () {
+                    this.audio.stop();
+                },
+                volumeChanged: function(volume) {
+                    this.audio.volume = volume / 100;
                 }
             })
         })()

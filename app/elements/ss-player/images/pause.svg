@@ -1,1 +1,13 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="pointer-events: none; display: block;"><g id="pause"><path d="M6,19h4V5H6V19z M14,5v14h4V5H14z"></path></g></svg>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="14px" height="14px" viewBox="0 0 14 14" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.0.4 (8054) - http://www.bohemiancoding.com/sketch -->
+    <title>Slice 2</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="pause" sketch:type="MSLayerGroup" fill="#000000">
+            <path d="M1,14 L5,14 L5,0 L1,0 L1,14 L1,14 Z M9,0 L9,14 L13,14 L13,0 L9,0 L9,0 Z" id="Shape" sketch:type="MSShapeGroup"></path>
+            <path d="M7.03967379,14.427 C3.21884045,14.427 0.116673787,11.3283333 0.116673787,7.504 C0.116673787,3.682 3.21767379,0.583333333 7.03967379,0.583333333 C10.8628405,0.583333333 13.9603405,3.682 13.9603405,7.504 C13.9603405,11.3283333 10.8628405,14.427 7.03967379,14.427 L7.03967379,14.427 Z" id="Path" opacity="0" sketch:type="MSShapeGroup"></path>
+        </g>
+    </g>
+</svg>
