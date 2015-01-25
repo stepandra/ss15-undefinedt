@@ -1,0 +1,36 @@
+<link rel="import" href="../../../lib/polymer/polymer.html">
+<link rel="import" href="../../../lib/core-icons/core-icons.html">
+<link rel="import" href="../../../lib/paper-slider/paper-slider.html">
+
+
+<polymer-element name="ss-control-sound" attributes="mutedImgSrc loudImgSrc">
+    <template>
+        <link rel="stylesheet" href="ss-control-sound.css"/>
+        <paper-icon-button id="muteUnMuteButton" on-click="{{muteOrUnMute}}"></paper-icon-button>
+        <paper-slider id="volumeSlider" pin min="0" max="100" value="{{soundVolume}}"
+                      on-change="{{onVolumeChange}}"></paper-slider>
+    </template>
+    <script type="text/javascript">
+        'use strict';
+        (function () {
+            Polymer({
+                soundVolume: (localStorage.getItem('sound-volume') || 100),
+                /** @type String */
+                mutedImgSrc: null,
+                /** @type String */
+                loudImgSrc: null,
+                ready: function () {
+                    this.mutedImgSrc = this.attributes.getNamedItem("mutedImgSrc").value;
+                    this.loudImgSrc = this.attributes.getNamedItem("loudImgSrc").value;
+                },
+                muteOrUnMute: function () {
+
+                },
+                onVolumeChange: function () {
+                    localStorage.setItem('sound-volume', this.soundVolume);
+                    this.$.soundVolumeLocalStorage.setAttribute("value", this.soundVolume);
+                }
+            })
+        })()
+    </script>
+</polymer-element>
