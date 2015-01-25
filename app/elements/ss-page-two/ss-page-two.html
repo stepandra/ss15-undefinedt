@@ -22,7 +22,6 @@
                     else location.hash = '#';
 
                     this.$.parseInterface.getSlidesById(slidesId).done(function (slidesData) {
-                        console.log(slidesData);
                         me.$.player.initialize(slidesData);
                     });
                 },
