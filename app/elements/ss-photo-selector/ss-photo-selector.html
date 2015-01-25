@@ -14,6 +14,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../../lib/paper-dropdown/paper-dropdown.html"/>
 <link rel="import" href="../../lib/paper-item/paper-item.html"/>
 <link rel="import" href="../../lib/core-menu/core-menu.html"/>
+<link rel="import" href="../../lib/core-icon/core-icon.html"/>
 
 <polymer-element name="ss-photo-selector">
     <template>
@@ -37,11 +38,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <ul class="photo-list">
                 <template repeat="{{photo in photos}}">
                     <li class="photo-list__item {{ {selected: photo.selected} | tokenList }}" is="list-element" on-click="{{selectPhoto}}">
+                        <paper-icon-button icon="add-to-photos"></paper-icon-button>
                         <img src="{{photo.picture}}" alt="photo"/>
                     </li>
                 </template>
-                <template if="{{ !photos.length }}">
-                    Сышь ты, Чепушила... Тут нету фоток
+                <template if="{{ photos && !photos.length }}">
+                    Photos in this album not found. Sorry!
                 </template>
             </ul>
         </content>

@@ -33,8 +33,6 @@
                     this.type = options.type || 'defaultType';
 
                     this[this.type].init(this.parameters.slideTime);
-
-                    this.play();
                 },
 
                 _render: function(currentSlideTime) {
@@ -66,6 +64,15 @@
                     this._render(currentTime % this.parameters.slideTime);
 
                     this.requestAnimationFrameId = window.requestAnimationFrame(this._step.bind(this));
+                },
+
+                pause: function() {
+                    if (!this.played)
+                        return false;
+
+                    window.cancelAnimationFrame(this.requestAnimationFrameId);
+                    this.paused = performance.now() - this.animationState.startTime;
+                    this.played = false;
                 },
 
                 play: function() {

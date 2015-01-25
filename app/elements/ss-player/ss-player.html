@@ -34,6 +34,8 @@
                     var _this = this;
                     _this.progress = 0;
 
+                    this.audio.src = data.tracks[0].stream_url;
+
                     this.loadPhotos(data.images).then(function(photos) {
                         _this.$.slideShowContent.initialize({
                             images: photos,
@@ -41,10 +43,7 @@
                                 slideTime: 3500
                             }
                         });
-                        console.error(message);
                     });
-
-                    this.audio.src = data.tracks[0].stream_url;
                 },
 
                 loadPhotos: function (photos) {
@@ -100,11 +99,13 @@
 
                     return deferred.promise;
                 },
-                playMusic: function () {
+                play: function() {
                     this.audio.play();
+                    _this.$.slideShowContent.play();
                 },
-                pauseMusic: function () {
-                    this.audio.stop();
+                pause: function() {
+                    this.audio.pause();
+                    _this.$.slideShowContent.pause();
                 }
             })
         })()
