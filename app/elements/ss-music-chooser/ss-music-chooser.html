@@ -2,7 +2,7 @@
 <link rel="import" href="../ss-soundcloud-interface/ss-soundcloud-interface.html">
 <link rel="import" href="../../lib/paper-input/paper-input.html">
 <link rel="import" href="../../lib/paper-button/paper-button.html">
-<link rel="import" href="../../lib/paper-dropdown/paper-dropdown.html">
+<link rel="import" href="../../lib/core-selector/core-selector.html">
 <link rel="import" href="../../lib/paper-item/paper-item.html">
 <link rel="import" href="../../lib/core-collapse/core-collapse.html">
 
@@ -12,16 +12,19 @@
         <div class="container">
             <paper-input id="artistInput" on-input="{{updateTrackList}}" floatingLabel label="Artist"
                          value="{{artist}}"></paper-input>
-            <paper-dropdown id="trackList" valign="top" relatedTarget="{{$.artistInput}}">
-                <div class="content">
-                    <template repeat="{{track, i in trackArray}}">
-                        <paper-item on-click="{{selectTrack}}" index="{{i}}">
-                            {{track.title}}
-                        </paper-item>
-                    </template>
-                </div>
-            </paper-dropdown>
             <paper-button disabled="" id="addButton" on-click="{{onAdd}}" raised>Add</paper-button>
+            <div style="clear: both"></div>
+            <paper-shadow>
+                <core-selector id="trackList">
+                    <div class="content">
+                        <template repeat="{{track, i in trackArray}}">
+                            <paper-item on-click="{{selectTrack}}" index="{{i}}">
+                                {{track.title}}
+                            </paper-item>
+                        </template>
+                    </div>
+                </core-selector>
+            </paper-shadow>
             <div style="clear: both"></div>
         </div>
         <ss-soundcloud-interface id="soundCloudInterface"></ss-soundcloud-interface>
@@ -46,8 +49,6 @@
             function getAudioListByArtist(component) {
                 component.$.soundCloudInterface.searchByQuery(component.artist).done(function (data) {
                     component.trackArray = data;
-                    if (data.length > 0)
-                        component.$.trackList.toggle();
                 });
             }
 
@@ -58,6 +59,7 @@
                     var me = this;
                     selectedTrack = null;
                     this.$.addButton.disabled = true;
+                    if (this.artist.length === 0) this.trackArray = [];
                     if (Date.now() - lastTypedTime > 500)
                         getAudioListByArtist(this);
                     else
@@ -77,7 +79,6 @@
                     };
                     this.$.addButton.disabled = false;
                     this.artist = selectedTrack.title;
-                    this.$.trackList.toggle();
                 },
                 onAdd: function () {
                     if (!selectedTrack) return;
