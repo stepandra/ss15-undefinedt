@@ -17,6 +17,7 @@
     <script type="text/javascript">
         (function () {
             "use strict";
+            var dfd = null;
 
             Polymer('ss-soundcloud-interface', {
                 soundCloud: {
@@ -25,23 +26,22 @@
                     license: 'cc-by-sa'
                 },
                 query: '',
-                dfd: null,
                 searchByQuery: function(query) {
                     if (query === '') throw new Error('Query cannot be empty');
                     this.query = query;
-                    this.dfd = Q.defer();
+                    dfd = Q.defer();
                     this.$.searchByQuery.go();
-                    return this.dfd.promise;
+                    return dfd.promise;
                 },
                 handleResponse: function(event, data) {
-                    if (this.dfd === null) throw new Error("Cannot handle empty request");
-                    this.dfd.resolve(data.response);
-                    this.dfd = null;
+                    if (dfd === null) throw new Error("Cannot handle empty request");
+                    dfd.resolve(data.response);
+                    dfd = null;
                 },
                 handleError: function(event) {
-                    if (this.dfd === null) throw new Error("Cannot handle empty request");
-                    this.dfd.reject(event);
-                    this.dfd = null;
+                    if (dfd === null) throw new Error("Cannot handle empty request");
+                    dfd.reject(event);
+                    dfd = null;
                 }
             });
         })();
