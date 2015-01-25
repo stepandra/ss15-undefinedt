@@ -1,0 +1,65 @@
+<link rel="import" href="../../../lib/polymer/polymer.html">
+<link rel="import" href="../../../lib/core-icons/core-icons.html">
+
+<polymer-element name="ss-control-fullscreen" attributes="expandImgSrc collapseImgSrc">
+    <template>
+        <link rel="stylesheet" href="ss-control-fullscreen.css"/>
+        <paper-icon-button id="expandCollapseButton" on-click="{{onClick}}"></paper-icon-button>
+    </template>
+    <script type="text/javascript">
+        (function () {
+            'use strict';
+            Polymer({
+                /** @type HTMLElement */
+                player: null,
+                /** @type String */
+                expandImgSrc: null,
+                /** @type String */
+                collapseImgSrc: null,
+                /** @type HTMLElement */
+                button: null,
+
+                ready: function () {
+                    this.expandImgSrc = this.attributes.getNamedItem("expandImgSrc").value;
+                    this.button = this.$.expandCollapseButton;
+                    this.button.setAttribute("src", this.expandImgSrc);
+                    this.collapseImgSrc = this.attributes.getNamedItem("collapseImgSrc").value;
+                },
+                init: function (player) {
+                    this.player = player;
+                },
+                onClick: function () {
+                    if (this.button.getAttribute("src") === this.expandImgSrc) {
+                        this.expand();
+                        this.button.setAttribute("src", this.collapseImgSrc);
+                    } else {
+                        this.collapse();
+                        this.button.setAttribute("src", this.expandImgSrc);
+                    }
+                },
+                expand: function () {
+                    if (!this.player.fullscreenElement &&    // alternative standard method
+                            !this.player.mozFullScreenElement && !this.player.webkitFullscreenElement
+                    ) {  // current working methods
+                        if (this.player.requestFullscreen) {
+                            this.player.requestFullscreen();
+                        } else if (this.player.mozRequestFullScreen) {
+                            this.player.mozRequestFullScreen();
+                        } else if (this.player.webkitRequestFullscreen) {
+                            this.player.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+                        }
+                    }
+                },
+                collapse: function () {
+                    if (this.player.cancelFullScreen) {
+                        this.player.cancelFullScreen();
+                    } else if (this.player.mozCancelFullScreen) {
+                        this.player.mozCancelFullScreen();
+                    } else if (this.player.webkitCancelFullScreen) {
+                        document.webkitCancelFullScreen();
+                    }
+                }
+            });
+        })();
+    </script>
+</polymer-element>
