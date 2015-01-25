@@ -65,7 +65,7 @@
                 addImages: function (images) {
                     this.images = images || [];
                     this.$.timeline.classList.add("active");
-                    this.$.saveFab.disabled = false;
+                    this.$.saveFab.disabled = (this.images.length === 0 && !this.track);
                 },
                 save: function () {
                     var me = this;
