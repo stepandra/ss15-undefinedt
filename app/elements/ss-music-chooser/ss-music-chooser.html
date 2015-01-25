@@ -12,8 +12,6 @@
         <div class="container">
             <paper-input id="artistInput" on-input="{{updateTrackList}}" floatingLabel label="Artist"
                          value="{{artist}}"></paper-input>
-            <paper-button disabled="" id="addButton" on-click="{{onAdd}}" raised>Add</paper-button>
-            <div style="clear: both"></div>
             <paper-shadow>
                 <core-selector id="trackList">
                     <div class="content">
@@ -58,7 +56,6 @@
                 updateTrackList: function () {
                     var me = this;
                     selectedTrack = null;
-                    this.$.addButton.disabled = true;
                     if (this.artist.length === 0) this.trackArray = [];
                     if (Date.now() - lastTypedTime > 500)
                         getAudioListByArtist(this);
@@ -77,12 +74,7 @@
                         formattedTime: toHHMMSS(track.duration),
                         stream_url: track.stream_url + '?client_id=' + this.$.soundCloudInterface.soundCloud.id
                     };
-                    this.$.addButton.disabled = false;
                     this.artist = selectedTrack.title;
-                },
-                onAdd: function () {
-                    if (!selectedTrack) return;
-                    this.$.addButton.disabled = true;
                     console.log('ss-music-chooser::track-selected');
                     this.fire('track-selected', selectedTrack);
                 }
