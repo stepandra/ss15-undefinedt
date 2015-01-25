@@ -12,11 +12,10 @@
                    on-core-response="{{saveSlidesSuccess}}"
                    on-core-error="{{saveSlidesError}}"></core-ajax>
         <core-ajax id="getSlides"
-                   url="https://api.parse.com/1/classes/Slides"
+                   url="https://api.parse.com/1/classes/Slides/{{body}}"
                    handleAs="json"
                    method="get"
                    headers="{{headers}}"
-                   params="{{body}}"
                    on-core-response="{{getSlidesSuccess}}"
                    on-core-error="{{getSlidesError}}"></core-ajax>
     </template>
@@ -57,7 +56,6 @@
                 },
                 getSlidesSuccess: function (event, data) {
                     if (dfd === null) throw new Error("Cannot complete empty request");
-                    console.log(data);
                     dfd.resolve(data.response);
                     dfd = null;
                 },
