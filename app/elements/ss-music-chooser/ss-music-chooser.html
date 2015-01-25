@@ -34,7 +34,8 @@
             function getAudioListByArtist(component) {
                 component.$.soundCloudInterface.searchByQuery(component.artist).done(function (data) {
                     component.trackArray = data;
-                    component.$.trackList.toggle();
+                    if (data.length > 0)
+                        component.$.trackList.toggle();
                 });
             }
 
@@ -54,7 +55,7 @@
                         }, 500);
                     lastTypedTime = Date.now();
                 },
-                selectTrack: function(event, detail, target) {
+                selectTrack: function (event, detail, target) {
                     selectedTrack = this.trackArray[target.getAttribute('index')];
                     this.$.addButton.disabled = false;
                     this.artist = selectedTrack.title;
@@ -62,6 +63,7 @@
                 },
                 onAdd: function () {
                     if (!selectedTrack) return;
+                    this.$.addButton.disabled = true;
                     console.log('ss-music-chooser::track-selected');
                     this.fire('track-selected', selectedTrack);
                 }

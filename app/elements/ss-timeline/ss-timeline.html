@@ -1,0 +1,40 @@
+<link rel="import" href="../../lib/polymer/polymer.html">
+
+<polymer-element name="ss-timeline">
+    <template>
+        <link rel="stylesheet" href="ss-timeline.css">
+        <div class="timeline">
+            <div class="images">
+                <template repeat="{{image in images}}">
+                    <div class="image">
+                        <img src="{{image.picture}}">
+                    </div>
+                </template>
+            </div>
+            <template if="{{track}}">
+                <div class="track">
+                    <span class="title">{{track.title}}</span>
+                    <span class="time">{{track.formattedTime}}</span>
+                </div>
+            </template>
+        </div>
+    </template>
+    <script type="text/javascript">
+        (function () {
+            "use strict";
+
+            Polymer('ss-timeline', {
+                images: [],
+                track: null,
+                addTrack: function (track) {
+                    this.track = track || {};
+                    this.track.formattedTime = moment(this.track.duration).format("HH:mm:ss");
+                    console.log(this.track);
+                },
+                addImages: function (images) {
+                    this.images = images || [];
+                }
+            });
+        })();
+    </script>
+</polymer-element>

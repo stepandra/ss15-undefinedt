@@ -1,18 +1,27 @@
 <link rel="import" href="../../lib/polymer/polymer.html">
 <link rel="import" href="../ss-facebook-interface/ss-facebook-interface.html"/>
 <link rel="import" href="../ss-photo-selector/ss-photo-selector.html"/>
+<link rel="import" href="../ss-music-chooser/ss-music-chooser.html"/>
+<link rel="import" href="../ss-timeline/ss-timeline.html"/>
 
 <polymer-element name="ss-page">
     <template>
         <link rel="stylesheet" href="ss-page.css"/>
+        <ss-music-chooser id="musicChooser"></ss-music-chooser>
         <ss-photo-selector id="photoSelector"></ss-photo-selector>
+        <ss-timeline id="timeline"></ss-timeline>
     </template>
     <script>
         (function() {
             Polymer('ss-page', {
                 ready: function() {
+                    var me = this;
+                    this.$.musicChooser.addEventListener('track-selected', function(event) {
+                        me.$.timeline.addTrack(event.detail);
+                    });
                     this.$.photoSelector.addEventListener('change', function(event) {
                         console.info('selectedPhoto list changed: ', event.detail);
+                        me.$.timeline.addImages(event.detail);
                     });
                 }
             });
