@@ -109,6 +109,9 @@
                 },
                 pauseMusic: function () {
                     this.audio.stop();
+                },
+                volumeChanged: function(volume) {
+                    this.audio.volume = volume / 100;
                 }
             })
         })()
