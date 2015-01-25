@@ -13,8 +13,7 @@
             <paper-icon-button id="muteButton" on-click="{{muteButtonClick}}" src="{{loudImgSrc}}"></paper-icon-button>
         </template>
         <template if="{{soundMuted}}">
-            <paper-icon-button id="unMuteButton" on-click="{{unMuteButtonClick}}"
-                               src="{{mutedImgSrc}}"></paper-icon-button>
+            <paper-icon-button id="unMuteButton" on-click="{{unMuteButtonClick}}" src="{{mutedImgSrc}}"></paper-icon-button>
         </template>
         <paper-slider id="volumeSlider" pin min="0" max="100" disabled?="{{soundMuted}}" immediateValue="{{soundVolume}}" on-immediate-value-change="{{onVolumeChange}}"></paper-slider>
     </template>

@@ -6,6 +6,7 @@
     &__item {
         background: #000
         float: left
+        position: relative
         margin: 4px
         cursor: pointer
         width: 130px
@@ -13,7 +14,7 @@
         overflow: hidden
         -webkit-animation: create 0.15s ease-out
 
-        img {
+        & > img {
             display: block
             opacity: 1
             transition: opacity 0.1s;
@@ -27,6 +28,41 @@
             opacity: 0.5;
         }
     }
+
+    &__add,
+    &__remove  {
+        width: 50px
+        height: 50px
+        left: 50%
+        top: 50%
+        margin: -25px 0 0 -25px
+        position: absolute
+        transition: opacity 0.2s
+        display: none
+    }
+
+    &__add {
+        display: block
+        opacity: 0
+        color: #8ace56
+    }
+
+    &__item.selected &__add {
+        display: none
+    }
+
+    &__item.selected &__remove{
+        display: block
+    }
+
+    &__remove {
+        color: red
+    }
+
+    &__item:hover &__add {
+        opacity: 1
+    }
+
 }
 
 @-webkit-keyframes create {
