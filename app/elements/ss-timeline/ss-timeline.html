@@ -9,7 +9,8 @@
         <div id="timeline" class="timeline">
             <div class="images">
                 <template repeat="{{image, i in images}}">
-                    <div class="image" on-tap="{{removeImage}}" index="{{i}}">
+                    <div class="image" on-tap="{{removeImage}}">
+                        <core-icon icon="clear" if="{{photo.selected}}" class="remove"></core-icon>
                         <img src="{{image.picture}}">
                     </div>
                 </template>
@@ -103,8 +104,7 @@
                     this.playedProgress = (newTime / this.track.duration) * 100;
                 },
                 removeImage: function (event, details, target) {
-                    var idx = parseInt(target.getAttribute('index'));
-                    triggerEvent(this, 'remove-image', this.images[idx]);
+                    triggerEvent(this, 'remove-image', target.templateInstance.model.image);
                 }
             });
         })();
