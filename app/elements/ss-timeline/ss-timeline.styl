@@ -33,6 +33,8 @@
     -o-transition: opacity 0.5s
     transition: opacity 0.5s
   .track
+    position relative
+    cursor pointer
     overflow hidden
     height 45px
     line-height 50px
@@ -52,6 +54,17 @@
       float right
     .title
       font-weight bold
+    .progress-indicator
+      position absolute
+      left 0
+      height 45px
+      width 0
+      background rgb(130,130,130)
+      background: linear-gradient(to bottom,  rgba(130,130,130,1) 0%,rgba(239,239,239,1) 50%,rgba(130,130,130,1) 100%); /* W3C */
+    span
+      z-index 1
+      position relative
+      text-shadow 2px 2px 2px rgba(150, 150, 150, 1)
   .images
     display block
     height 80px

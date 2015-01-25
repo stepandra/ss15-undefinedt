@@ -15,9 +15,10 @@
                 </template>
             </div>
             <template if="{{track}}">
-                <div class="track">
+                <div class="track" on-tap="{{toggleAudioPlayback}}">
+                    <div class="progress-indicator" style="width: {{playedProgress}}%"></div>
                     <span class="title">{{track.title}}</span>
-                    <span class="time">{{track.formattedTime}}</span>
+                    <span class="time">{{time}}</span>
                 </div>
             </template>
             <paper-fab id="saveFab" on-tap="{{save}}" icon="launch" title="Publish"></paper-fab>
@@ -28,17 +29,36 @@
     <script type="text/javascript">
         (function () {
             "use strict";
+            var audioPlaying = false;
 
             function triggerEvent(component, evtName, data) {
                 console.log('ss-timeline::' + evtName);
                 component.fire(evtName, data);
             }
 
+            function toHHMMSS(miliseconds) {
+                var sec_num = parseInt(miliseconds / 1000);
+                var hours = Math.floor(sec_num / 3600);
+                var minutes = Math.floor((sec_num - (hours * 3600)) / 60);
+                var seconds = sec_num - (hours * 3600) - (minutes * 60);
+
+                if (hours < 10) hours = "0" + hours;
+                if (minutes < 10) minutes = "0" + minutes;
+                if (seconds < 10) seconds = "0" + seconds;
+                return hours + ':' + minutes + ':' + seconds;
+            }
+
             Polymer('ss-timeline', {
+                time: 0,
+                playedProgress: 0,
                 images: [],
                 track: null,
                 addTrack: function (track) {
+                    audioPlaying = false;
+                    this.playedProgress = 0;
                     this.track = track || {};
+                    this.time = this.track.formattedTime;
+                    this.$.trackPreview.src = this.track.stream_url;
                     this.$.timeline.classList.add("active");
                     this.$.saveFab.disabled = false;
                 },
@@ -47,7 +67,7 @@
                     this.$.timeline.classList.add("active");
                     this.$.saveFab.disabled = false;
                 },
-                save: function() {
+                save: function () {
                     var me = this;
                     var data = {
                         images: this.images,
@@ -59,6 +79,23 @@
                         location.hash = "#/watch/" + data.objectId;
                     });
                     triggerEvent(this, 'save-started', data);
+                },
+                toggleAudioPlayback: function () {
+                    if (audioPlaying) this.$.trackPreview.pause();
+                    else this.$.trackPreview.play();
+                    audioPlaying = !audioPlaying;
+                    this.time = this.track.formattedTime;
+                    this.updateTime();
+                },
+                updateTime: function () {
+                    var me = this;
+                    if (!audioPlaying) return;
+                    setTimeout(function () {
+                        me.updateTime();
+                    }, 500);
+                    var newTime = Math.floor(this.$.trackPreview.currentTime) * 1000;
+                    this.time = toHHMMSS(newTime);
+                    this.playedProgress = (newTime / this.track.duration) * 100;
                 }
             });
         })();
