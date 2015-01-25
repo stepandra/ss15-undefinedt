@@ -31,6 +31,18 @@
             var selectedTrack = null;
             var lastTypedTime = 0;
 
+            function toHHMMSS(miliseconds) {
+                var sec_num = parseInt(miliseconds / 1000);
+                var hours = Math.floor(sec_num / 3600);
+                var minutes = Math.floor((sec_num - (hours * 3600)) / 60);
+                var seconds = sec_num - (hours * 3600) - (minutes * 60);
+
+                if (hours < 10) hours = "0" + hours;
+                if (minutes < 10) minutes = "0" + minutes;
+                if (seconds < 10) seconds = "0" + seconds;
+                return hours + ':' + minutes + ':' + seconds;
+            }
+
             function getAudioListByArtist(component) {
                 component.$.soundCloudInterface.searchByQuery(component.artist).done(function (data) {
                     component.trackArray = data;
@@ -56,7 +68,13 @@
                     lastTypedTime = Date.now();
                 },
                 selectTrack: function (event, detail, target) {
-                    selectedTrack = this.trackArray[target.getAttribute('index')];
+                    var track = this.trackArray[target.getAttribute('index')];
+                    selectedTrack = {
+                        title: track.title,
+                        duration: track.duration,
+                        formattedTime: toHHMMSS(track.duration),
+                        stream_url: track.stream_url
+                    };
                     this.$.addButton.disabled = false;
                     this.artist = selectedTrack.title;
                     this.$.trackList.toggle();

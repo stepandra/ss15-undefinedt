@@ -1,5 +1,7 @@
 <link rel="import" href="../../lib/polymer/polymer.html">
 <link rel="import" href="../../lib/paper-fab/paper-fab.html">
+<link rel="import" href="../../lib/core-icons/core-icons.html">
+<link rel="import" href="../ss-parse-interface/ss-parse-interface.html">
 
 <polymer-element name="ss-timeline">
     <template>
@@ -18,23 +20,17 @@
                     <span class="time">{{track.formattedTime}}</span>
                 </div>
             </template>
-            <paper-fab id="saveFab" on-tap="{{save}}" icon="add"></paper-fab>
+            <paper-fab id="saveFab" on-tap="{{save}}" icon="done" title="Publish"></paper-fab>
         </div>
+        <ss-parse-interface id="parseInterface"></ss-parse-interface>
     </template>
     <script type="text/javascript">
         (function () {
             "use strict";
 
-            function toHHMMSS(miliseconds) {
-                var sec_num = parseInt(miliseconds / 1000);
-                var hours = Math.floor(sec_num / 3600);
-                var minutes = Math.floor((sec_num - (hours * 3600)) / 60);
-                var seconds = sec_num - (hours * 3600) - (minutes * 60);
-
-                if (hours < 10) hours = "0" + hours;
-                if (minutes < 10) minutes = "0" + minutes;
-                if (seconds < 10) seconds = "0" + seconds;
-                return hours + ':' + minutes + ':' + seconds;
+            function triggerEvent(component, evtName, data) {
+                console.log('ss-timeline::' + evtName);
+                component.fire(evtName, data);
             }
 
             Polymer('ss-timeline', {
@@ -42,7 +38,6 @@
                 track: null,
                 addTrack: function (track) {
                     this.track = track || {};
-                    this.track.formattedTime = toHHMMSS(this.track.duration);
                     this.$.timeline.classList.add("active");
                     this.$.saveFab.disabled = false;
                 },
@@ -52,12 +47,15 @@
                     this.$.saveFab.disabled = false;
                 },
                 save: function() {
-                    this.$.saveFab.disabled = true;
-                    console.log('ss-timeline::save-started');
-                    this.fire('save-started', {
+                    var data = {
                         images: this.images,
-                        tracks: this.track
+                        tracks: [this.track]
+                    };
+                    this.$.saveFab.disabled = true;
+                    this.$.parseInterface.saveSlides(data).then(function (data) {
+                        triggerEvent(this, 'slides-saved', data);
                     });
+                    triggerEvent(this, 'save-started', data);
                 }
             });
         })();
