@@ -23,11 +23,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <paper-dropdown-menu label="Choice album" class="drop-down">
                 <paper-dropdown class="dropdown">
                     <core-menu class="menu">
+                        <paper-item on-click="{{loadPhotos}}" url="/me/photos">Tagged in photos</paper-item>
+                        <paper-item on-click="{{loadPhotos}}" url="/me/photos/uploaded">Uploaded photos</paper-item>
                         <template repeat="{{album in albums}}">
                             <paper-item on-click="{{loadPhotos}}" url="/{{album.id}}/photos">{{album.name}}</paper-item>
                         </template>
-                        <paper-item on-click="{{loadPhotos}}" url="/me/photos">Tagged in photos</paper-item>
-                        <paper-item on-click="{{loadPhotos}}" url="/me/photos/uploaded">Uploaded photos</paper-item>
                     </core-menu>
                 </paper-dropdown>
             </paper-dropdown-menu>
