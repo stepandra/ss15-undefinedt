@@ -20,9 +20,10 @@
                     <span class="time">{{track.formattedTime}}</span>
                 </div>
             </template>
-            <paper-fab id="saveFab" on-tap="{{save}}" icon="done" title="Publish"></paper-fab>
+            <paper-fab id="saveFab" on-tap="{{save}}" icon="launch" title="Publish"></paper-fab>
         </div>
         <ss-parse-interface id="parseInterface"></ss-parse-interface>
+        <audio id="trackPreview"></audio>
     </template>
     <script type="text/javascript">
         (function () {
