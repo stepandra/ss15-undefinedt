@@ -15,7 +15,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         (function() {
             var enableDeferred = Q.defer();
             Polymer('ss-facebook-interface', {
-                _checkStatus: function() {
+                checkStatus: function() {
                     var _this = this;
                     FB.getLoginStatus(function(response) {
                         _this._statusChangeCallback(response);
@@ -53,8 +53,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                                 version    : 'v2.2',
                                 status     : true
                             });
-
-                            _this._checkStatus();
                         };
 
                         (function(d, s, id){
