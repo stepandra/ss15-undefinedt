@@ -1,0 +1,126 @@
+<link rel="import" href="../../../lib/polymer/polymer.html">
+
+<polymer-element name="ss-canvas">
+    <template>
+        <canvas id="canvas"></canvas>
+    </template>
+    <script type="text/javascript">
+        'use strict';
+        (function () {
+
+            Polymer({
+                ready: function() {
+                    this.canvas = this.$.canvas;
+                    this.context = this.canvas;
+                },
+
+                initialize: function(options) {
+                    this.parameters = options.parameters;
+                    this.images = options.images;
+                    this.paused = 0;
+                    this.played = false;
+                    this.totalTime = this.parameters.slideTime + this.parameters.transitionTime;
+
+                    this.initialized = true;
+
+                    this.animationState = {
+                        currentSlide: 0,
+                        startTime: 0
+                    };
+
+                    this.type = options.type || 'defaultType';
+
+                    this[this.type].init(this.parameters.slideTime);
+                },
+
+                _render: function(currentSlideTime) {
+                    this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+                    var animationObject = this[this.type].func(
+                            this.animationState.currentSlide,
+                            currentTime,
+                            this.totalTime,
+                            currentSlideTime,
+                            this.images,
+                            this.canvas
+                    );
+
+                    this._draw(this.images[this.animationState.currentSlide], animationObject);
+                },
+
+                _step: function(time) {
+                    var currentTime = (time - this.animationState.startTime);
+
+                    if (currentTime/this.parameters.slideTime >= this.animationState.currentSlide + 1) {
+                        this.animationState.currentSlide ++;
+                        if (this.animationState.currentSlide >= this.images.length) {
+                            return false;
+                        }
+                    }
+
+                    this._render(currentTime % this.parameters.slideTime);
+
+                    this.requestAnimationFrameId = window.requestAnimationFrame(this._step.bind(this));
+                },
+
+                play: function() {
+                    if (this.played)
+                        return false;
+
+                    this.animationState.startTime = performance.now() - this.paused;
+                    window.requestAnimationFrame(this._step.bind(this));
+                    this.played = true;
+                },
+
+                _draw: function(image, object){
+                    this.context.save();
+                    for (var key in object) {
+                        switch (key) {
+                            case 'opacity':
+                                this.context.globalAlpha = object.opacity;
+                                break;
+                            case 'scale':
+                                this.context.scale(object.scale, object.scale);
+                                break;
+                        }
+                    }
+                    this.context.drawImage(image, object.x, object.y);
+                    //this.context.drawImage(image, 0, 0, image.width, image.height, (this.canvas.width/scale - this.canvas.width)/2, (this.canvas.height/scale - this.canvas.height)/2, this.canvas.width, this.canvas.height);
+                    this.context.restore();
+                },
+
+                defaultType: {
+                    func: function(currentSlide, currentTime, totalTime, slideTime, images, canvas) {
+                        var result = {};
+
+                        result[currentSlide] = {};
+                        result[currentSlide + 1] = {};
+
+                        if (currentSlideTime - this.hideDuration < 0) {
+                            result[currentSlide].opacity = this.timingValue(currentSlideTime, this.hideDuration, 1, 0);
+                            result[currentSlide].scale = this.timingValue(currentSlideTime + slideTime, totalTime, 1, this.scale);
+                            result[currentSlide + 1].opacity = this.timingValue(currentSlideTime, this.hideDuration, 1, 0);
+                        }
+
+                        result[currentSlide + 1].scale = this.timingValue(currentSlideTime, totalTime, 1, this.scale);
+
+                        result[currentSlide].x = (canvas.width/result[currentSlide].scale - images[currentSlide].width)/2;
+                        result[currentSlide].y = (canvas.height/result[currentSlide].scale - images[currentSlide].height)/2;
+                        result[currentSlide+1].x = (canvas.width/result[currentSlide+1].scale - images[currentSlide+1].width)/2;
+                        result[currentSlide+1].y = (canvas.height/result[currentSlide+1].scale - images[currentSlide+1].height)/2;
+                    },
+
+                    timingValue: function(currentTime, endTime, startValue, endValue) {
+                        return startValue + currentTime/endTime * (endValue - startValue);
+                    },
+
+                    init: function(slideTime) {
+                        this.hideDuration = slideTime * 0.15;
+                    },
+
+                    scale: 1.2
+                }
+            });
+        })()
+    </script>
+</polymer-element>
