@@ -77,7 +77,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
                 getPhotos: function(successCallback, errorCallback) {
                     enableDeferred.promise.then(function() {
-                        FB.api('/me/photos', function(response) {
+                        FB.api('/me/photos/uploaded', function(response) {
                             if (response && !response.error) {
                                 successCallback(response.data);
                             } else {
