@@ -13,12 +13,13 @@
         overflow: hidden
 
         img {
-            transform: translateY(-50%)
-            position: relative
-            top: 50%
             display: block
             opacity: 1
             transition: opacity 0.1s;
+            min-width: 100%
+            min-height: 100%
+            width: auto
+            height: auto
         }
 
         &.selected img{

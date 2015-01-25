@@ -7,13 +7,14 @@
   background #6e6e6e
   width 100%
   z-index 1
-  padding 5px
+  padding 10px 5px 5px
   box-sizing border-box
   -webkit-transition: height 0.5s
   -moz-transition: height 0.5s
   -ms-transition: height 0.5s
   -o-transition: height 0.5s
   transition: height 0.5s
+
   &.active
     height 135px
     paper-fab
@@ -54,16 +55,20 @@
   .images
     display block
     height 80px
+    overflow: auto
+    white-space: nowrap
     .image
-      display block
-      float left
+      display inline-block
+      vertical-align: top
       background: #000
-      margin: 4px
+      margin: 0 4px
       cursor: pointer
       width: 130px
       height: 80px
       overflow: hidden
       img
-        transform: translateY(-50%)
-        position: relative
-        top 50%
+        display: block
+        min-width: 100%
+        min-height: 100%
+        width: auto
+        height: auto

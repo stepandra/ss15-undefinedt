@@ -2,7 +2,8 @@
 
 <polymer-element name="ss-canvas">
     <template>
-        <canvas width="600" height="500" id="canvas"></canvas>
+        <link rel="stylesheet" href="ss-canvas.css"/>
+        <canvas width="1280" height="720" id="canvas"></canvas>
     </template>
     <script type="text/javascript">
         'use strict';
@@ -11,6 +12,8 @@
             Polymer({
                 ready: function() {
                     this.canvas = this.$.canvas;
+                    this.canvas.width = 1280;
+                    this.canvas.height = 720;
                     this.context = this.canvas.getContext('2d');
                 },
 
@@ -86,6 +89,7 @@
                                 break;
                         }
                     }
+                    console.log(image.width, this.canvas.width);
                     this.context.drawImage(image, object.x, object.y);
                     //this.context.drawImage(image, 0, 0, image.width, image.height, (this.canvas.width/scale - this.canvas.width)/2, (this.canvas.height/scale - this.canvas.height)/2, this.canvas.width, this.canvas.height);
                     this.context.restore();

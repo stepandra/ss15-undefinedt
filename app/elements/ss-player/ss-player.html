@@ -6,7 +6,6 @@
 <link rel="import" href="ss-control-play/ss-control-play.html"/>
 <link rel="import" href="ss-canvas/ss-canvas.html"/>
 
-
 <polymer-element name="ss-player">
     <template>
         <link rel="stylesheet" href="ss-player.css"/>
@@ -34,14 +33,13 @@
                     var _this = this;
                     _this.progress = 0;
 
-                    this.loadPhotos(data.photos).then(function(photos) {
+                    this.loadPhotos(data.images).then(function(photos) {
                         _this.$.slideShowContent.initialize({
                             images: photos,
                             parameters: {
                                 slideTime: 2500
                             }
                         });
-                    }, function(message) {
                         console.error(message);
                     });
                 },
@@ -63,7 +61,7 @@
                         photo.addEventListener('load', onLoad);
                         photo.addEventListener('error', onError);
 
-                        photo.src = photos[index].source;
+                        photo.src = photos[index].images[0].source;
 
                         startLoaded++;
                     }
