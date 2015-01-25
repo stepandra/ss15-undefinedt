@@ -25,11 +25,11 @@
                 },
                 playButtonClick: function () {
                     if (this.playing) {
-                        this.fire("on-stop");
+                        this.asyncFire("on-stop");
                         this.playing = false;
                         this.$.playStopButton.setAttribute("src", this.playImgSrc);
                     } else {
-                        this.fire("on-play");
+                        this.asyncFire("on-play");
                         this.playing = true;
                         this.$.playStopButton.setAttribute("src", this.stopImgSrc);
                     }
