@@ -7,9 +7,8 @@
 <polymer-element name="ss-control-sound" attributes="mutedImgSrc loudImgSrc">
     <template>
         <link rel="stylesheet" href="ss-control-sound.css"/>
-        <core-localstorage name="Sound volume" value="{{soundVolumeLocalStorage}}"></core-localstorage>
-        <core-localstorage name="Sound muted" value="{{soundMuted}}"
-                           core-localstorage-load="{{localStorageDidLoad(event)}}"></core-localstorage>
+        <core-localstorage name="Sound volume" value="{{soundVolume}}"></core-localstorage>
+        <core-localstorage name="Sound muted" value="{{soundMuted}}"></core-localstorage>
         <template if="{{soundVolume > 0 }}">
             <paper-icon-button id="muteButton" on-click="{{muteButtonClick}}" src="{{loudImgSrc}}"></paper-icon-button>
         </template>
@@ -17,21 +16,15 @@
             <paper-icon-button id="unMuteButton" on-click="{{unMuteButtonClick}}"
                                src="{{mutedImgSrc}}"></paper-icon-button>
         </template>
-        <paper-slider id="volumeSlider" pin min="0" max="100" value="{{soundVolume}}"
-                      on-change="{{onVolumeChange}}"></paper-slider>
+        <paper-slider id="volumeSlider" pin min="0" max="100" immediateValue="{{soundVolume}}" immediate-value-change="{{onVolumeChange}}"></paper-slider>
     </template>
     <script type="text/javascript">
         'use strict';
         (function () {
             Polymer({
-                soundVolume: 100,
-                soundVolumeLocalStorage: 100,
-                soundMuted: false,
-                localStorageDidLoad: function (event) {
-                    if (this.soundMuted === false) {
-                        this.soundVolume = this.soundVolumeLocalStorage;
-                    }
-                    console.log("loll")
+                create: function() {
+                    this.soundVolume = 100;
+                    this.soundMuted = false;
                 },
                 muteButtonClick: function () {
                     this.soundMuted = true;
