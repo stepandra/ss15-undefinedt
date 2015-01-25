@@ -1,24 +1,33 @@
 <link rel="import" href="../../lib/polymer/polymer.html">
+<link rel="import" href="../ss-player/ss-player.html">
+<link rel="import" href="../ss-parse-interface/ss-parse-interface.html">
 
 <polymer-element name="ss-page-two">
     <template>
         <link rel="stylesheet" href="ss-page-two.css"/>
-        <h1>Watching slide show with id: {{id}}</h1>
-
-        <div>Cool, isn't it?</div>
+        <ss-player id="player"></ss-player>
+        <ss-parse-interface id="parseInterface"></ss-parse-interface>
     </template>
     <script type="text/javascript">
         (function () {
             "use strict";
+            var slidesId = '';
 
             Polymer('ss-page-two', {
-                id: '',
                 ready: function () {
+                    var me = this;
                     var hash = location.hash;
                     var matches = hash.match(/^#\/watch\/([a-zA-Z0-9]+)\/?$/);
-                    if (matches) this.id = matches[1];
+                    if (matches) slidesId = matches[1];
                     else location.hash = '#';
-                    console.log(this.id);
+
+                    this.$.parseInterface.getSlidesById(slidesId).done(function (slidesData) {
+                        console.log(slidesData);
+                        me.$.player.initialize(slidesData);
+                    });
+                },
+                get id() {
+                    return slidesId;
                 }
             });
         })();
