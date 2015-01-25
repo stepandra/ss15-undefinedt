@@ -48,14 +48,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </template>
     <script>
         (function() {
-
-            function selectedFilter(array) {
-                return array.filter(function(element) {
-                    return element.selected;
-                });
-            }
-
             Polymer('ss-photo-selector', {
+                selectedPhotos: [],
                 ready: function() {
                     var _this = this;
 
@@ -72,7 +66,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
                 selectPhoto: function(event, details, target) {
                     target.templateInstance.model.photo.selected = !target.templateInstance.model.photo.selected;
-                    this.fire('change', selectedFilter(this.photos));
+                    if (target.templateInstance.model.photo.selected) {
+                        this.selectedPhotos.push(target.templateInstance.model.photo);
+                    } else {
+                        this.removePhoto(target.templateInstance.model.photo);
+                    }
+
+                    this.fire('change', this.selectedPhotos);
+                },
+
+                removePhoto: function(photo) {
+                    var index = this.selectedPhotos.indexOf(photo);
+                    if (index !== -1) {
+                        this.selectedPhotos.splice(index, 1);
+                    } else {
+                        console.warn(photo, ' not found');
+                    }
                 },
 
                 loadPhotos: function(event, detail, target) {
