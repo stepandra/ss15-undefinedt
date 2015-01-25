@@ -73,7 +73,7 @@
                         title: track.title,
                         duration: track.duration,
                         formattedTime: toHHMMSS(track.duration),
-                        stream_url: track.stream_url
+                        stream_url: track.stream_url + '?client_id=' + this.$.soundCloudInterface.soundCloud.id
                     };
                     this.$.addButton.disabled = false;
                     this.artist = selectedTrack.title;
