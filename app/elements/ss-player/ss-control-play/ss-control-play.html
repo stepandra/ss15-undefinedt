@@ -25,7 +25,7 @@
                 },
                 playButtonClick: function () {
                     if (this.playing) {
-                        this.asyncFire("stop");
+                        this.asyncFire("pause");
                         this.playing = false;
                         this.$.playStopButton.setAttribute("src", this.playImgSrc);
                     } else {

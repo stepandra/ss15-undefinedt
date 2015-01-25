@@ -45,11 +45,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     if (!window.fbAsyncInit) {
                         window.fbAsyncInit = function() {
                             FB.init({
-                                appId      : '807594479313739',
+                                appId      : '771635556253944',
                                 xfbml      : true,
                                 version    : 'v2.2',
                                 status     : true
                             });
+
+                            _this.checkStatus();
                         };
 
                         (function(d, s, id){

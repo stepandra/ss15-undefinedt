@@ -57,6 +57,7 @@
                     if (currentTime/this.parameters.slideTime >= this.animationState.currentSlide + 1) {
                         this.animationState.currentSlide ++;
                         if (this.animationState.currentSlide >= this.images.length) {
+                            this.fire('end');
                             return false;
                         }
                     }
@@ -72,6 +73,12 @@
 
                     window.cancelAnimationFrame(this.requestAnimationFrameId);
                     this.paused = performance.now() - this.animationState.startTime;
+                    this.played = false;
+                },
+
+                stop: function() {
+                    window.cancelAnimationFrame(this.requestAnimationFrameId);
+                    this.paused = 0;
                     this.played = false;
                 },
 
@@ -96,7 +103,6 @@
                                 break;
                         }
                     }
-                    console.log(image.width, this.canvas.width);
                     this.context.drawImage(image, object.x, object.y);
                     //this.context.drawImage(image, 0, 0, image.width, image.height, (this.canvas.width/scale - this.canvas.width)/2, (this.canvas.height/scale - this.canvas.height)/2, this.canvas.width, this.canvas.height);
                     this.context.restore();

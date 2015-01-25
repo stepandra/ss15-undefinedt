@@ -10,12 +10,12 @@
     <template>
         <link rel="stylesheet" href="ss-player.css"/>
         <ss-canvas id="slideShowContent"></ss-canvas>
-        <div id="controlSet">
+        <div class="controlSet">
             <ss-control-sound on-volume-change="{{volumeChanged}}"
                               mutedImgSrc="elements/ss-player/images/muted.svg"
                               loudImgSrc="elements/ss-player/images/loud.svg"></ss-control-sound>
             <paper-icon-button src="images/previous.svg"></paper-icon-button>
-            <ss-control-play on-play="{{playMusic(element)}}" on-stop="{{pauseMusic}}"
+            <ss-control-play on-play="{{play}}" on-pause="{{pause}}"
                              playImgSrc="elements/ss-player/images/play.svg"
                              stopImgSrc="elements/ss-player/images/pause.svg"></ss-control-play>
             <paper-icon-button src="images/next.svg"></paper-icon-button>
@@ -38,6 +38,10 @@
                     var _this = this;
                     _this.progress = 0;
 
+                    if (data.tracks[0]) {
+                        this.audio.src = data.tracks[0].stream_url;
+                    }
+
                     this.loadPhotos(data.images).then(function(photos) {
                         _this.$.slideShowContent.initialize({
                             images: photos,
@@ -45,10 +49,9 @@
                                 slideTime: 3500
                             }
                         });
+                    }, function(message) {
                         console.error(message);
                     });
-
-                    this.audio.src = data.tracks[0].stream_url;
                 },
 
                 loadPhotos: function (photos) {
@@ -104,13 +107,29 @@
 
                     return deferred.promise;
                 },
-                playMusic: function () {
-                    this.audio.play();
+                play: function() {
+                    if (this.audio.src) {
+                        this.audio.play();
+                    }
+                    this.$.slideShowContent.play();
                 },
-                pauseMusic: function () {
-                    this.audio.stop();
+
+                pause: function() {
+                    if (this.audio.src) {
+                        this.audio.play();
+                    }
+                    this.$.slideShowContent.pause();
                 },
-                volumeChanged: function(volume) {
+
+                stop: function() {
+                    if (this.audio.src) {
+                        this.audio.pause();
+                        this.audio.currentTime = 0;
+                    }
+                    this.$.slideShowContent.stop();
+                },
+
+                volumeChanged: function(event, volume) {
                     this.audio.volume = volume / 100;
                 }
             })
