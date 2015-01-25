@@ -7,36 +7,35 @@
 <polymer-element name="ss-control-sound" attributes="mutedImgSrc loudImgSrc">
     <template>
         <link rel="stylesheet" href="ss-control-sound.css"/>
-        <core-localstorage name="Sound volume" value="{{soundVolume}}"></core-localstorage>
-        <core-localstorage name="Sound muted" value="{{soundMuted}}"></core-localstorage>
-        <template if="{{soundVolume > 0 }}">
+        <core-localstorage name="soundVolume" value="{{soundVolume}}"></core-localstorage>
+        <core-localstorage name="soundMuted" value="{{soundMuted}}"></core-localstorage>
+        <template if="{{!soundMuted}}">
             <paper-icon-button id="muteButton" on-click="{{muteButtonClick}}" src="{{loudImgSrc}}"></paper-icon-button>
         </template>
-        <template if="{{soundVolume == 0 }}">
-            <paper-icon-button id="unMuteButton" on-click="{{unMuteButtonClick}}"
-                               src="{{mutedImgSrc}}"></paper-icon-button>
+        <template if="{{soundMuted}}">
+            <paper-icon-button id="unMuteButton" on-click="{{unMuteButtonClick}}" src="{{mutedImgSrc}}"></paper-icon-button>
         </template>
-        <paper-slider id="volumeSlider" pin min="0" max="100" immediateValue="{{soundVolume}}" immediate-value-change="{{onVolumeChange}}"></paper-slider>
+        <paper-slider id="volumeSlider" pin min="0" max="100" disabled?="{{soundMuted}}" immediateValue="{{soundVolume}}" on-immediate-value-change="{{onVolumeChange}}"></paper-slider>
     </template>
     <script type="text/javascript">
         'use strict';
         (function () {
             Polymer({
-                create: function() {
-                    this.soundVolume = 100;
-                    this.soundMuted = false;
-                },
+                soundVolume: 100,
+                soundMuted: false,
                 muteButtonClick: function () {
                     this.soundMuted = true;
-                    this.soundVolume = 0;
+                    this.asyncFire('volume-change', 0);
                 },
                 unMuteButtonClick: function () {
                     this.soundMuted = false;
-                    this.soundVolume = this.soundVolumeLocalStorage;
+                    this.asyncFire('volume-change', this.soundVolume);
                 },
                 onVolumeChange: function () {
-                    if (!this.soundMuted) {
-                        this.soundVolumeLocalStorage = this.soundVolume;
+                    if (this.soundVolume === 0) {
+                        this.soundMuted = true;
+                    } else {
+                        this.soundMuted = false;
                     }
                     this.asyncFire('volume-change', this.soundVolume);
                 }

@@ -9,7 +9,7 @@
 <polymer-element name="ss-player">
     <template>
         <link rel="stylesheet" href="ss-player.css"/>
-        <ss-canvas id="slideShowContent"></ss-canvas>
+        <ss-canvas id="slideShowContent" on-end="{{stop}}"></ss-canvas>
         <div class="controlSet">
             <ss-control-sound on-volume-change="{{volumeChanged}}"
                               mutedImgSrc="elements/ss-player/images/muted.svg"
