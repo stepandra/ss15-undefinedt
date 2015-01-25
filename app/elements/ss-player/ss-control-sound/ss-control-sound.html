@@ -1,12 +1,22 @@
 <link rel="import" href="../../../lib/polymer/polymer.html">
 <link rel="import" href="../../../lib/core-icons/core-icons.html">
 <link rel="import" href="../../../lib/paper-slider/paper-slider.html">
+<link rel="import" href="../../../lib/core-localstorage/core-localstorage.html">
 
 
 <polymer-element name="ss-control-sound" attributes="mutedImgSrc loudImgSrc">
     <template>
         <link rel="stylesheet" href="ss-control-sound.css"/>
-        <paper-icon-button id="muteUnMuteButton" on-click="{{muteOrUnMute}}"></paper-icon-button>
+        <core-localstorage name="Sound volume" value="{{soundVolumeLocalStorage}}"></core-localstorage>
+        <core-localstorage name="Sound muted" value="{{soundMuted}}"
+                           core-localstorage-load="{{localStorageDidLoad}}"></core-localstorage>
+        <template if="{{soundVolume > 0 }}">
+            <paper-icon-button id="muteButton" on-click="{{muteButtonClick}}" src="{{loudImgSrc}}"></paper-icon-button>
+        </template>
+        <template if="{{soundVolume == 0 }}">
+            <paper-icon-button id="unMuteButton" on-click="{{unMuteButtonClick}}"
+                               src="{{mutedImgSrc}}"></paper-icon-button>
+        </template>
         <paper-slider id="volumeSlider" pin min="0" max="100" value="{{soundVolume}}"
                       on-change="{{onVolumeChange}}"></paper-slider>
     </template>
@@ -14,21 +24,28 @@
         'use strict';
         (function () {
             Polymer({
-                soundVolume: (localStorage.getItem('sound-volume') || 100),
-                /** @type String */
-                mutedImgSrc: null,
-                /** @type String */
-                loudImgSrc: null,
-                ready: function () {
-                    this.mutedImgSrc = this.attributes.getNamedItem("mutedImgSrc").value;
-                    this.loudImgSrc = this.attributes.getNamedItem("loudImgSrc").value;
+                soundVolume: 100,
+                soundVolumeLocalStorage: 100,
+                soundMuted: false,
+                audio: new Audio(),
+                localStorageDidLoad: function (po) {
+                    if (!this.soundMuted) {
+                        this.soundVolume = this.soundVolumeLocalStorage;
+                    }
+                    console.log("loll")
                 },
-                muteOrUnMute: function () {
-
+                muteButtonClick: function () {
+                    this.soundMuted = true;
+                    this.soundVolume = 0;
+                },
+                unMuteButtonClick: function () {
+                    this.soundMuted = false;
+                    this.soundVolume = this.soundVolumeLocalStorage;
                 },
                 onVolumeChange: function () {
-                    localStorage.setItem('sound-volume', this.soundVolume);
-                    this.$.soundVolumeLocalStorage.setAttribute("value", this.soundVolume);
+                    if (!this.soundMuted) {
+                        this.soundVolumeLocalStorage = this.soundVolume;
+                    }
                 }
             })
         })()

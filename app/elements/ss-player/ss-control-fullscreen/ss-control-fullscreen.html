@@ -4,7 +4,7 @@
 <polymer-element name="ss-control-fullscreen" attributes="expandImgSrc collapseImgSrc">
     <template>
         <link rel="stylesheet" href="ss-control-fullscreen.css"/>
-        <paper-icon-button id="expandCollapseButton" on-click="{{onClick}}"></paper-icon-button>
+        <paper-icon-button id="expandCollapseButton" on-click="{{onClick}}" src="{{buttonIconSrc}}"></paper-icon-button>
     </template>
     <script type="text/javascript">
         (function () {
@@ -12,51 +12,54 @@
             Polymer({
                 /** @type HTMLElement */
                 player: null,
-                /** @type String */
-                expandImgSrc: null,
-                /** @type String */
-                collapseImgSrc: null,
-                /** @type HTMLElement */
-                button: null,
-
+                expandImgSrc: "",
+                collapseImgSrc: "",
+                buttonIconSrc: "",
                 ready: function () {
                     this.expandImgSrc = this.attributes.getNamedItem("expandImgSrc").value;
-                    this.button = this.$.expandCollapseButton;
-                    this.button.setAttribute("src", this.expandImgSrc);
+                    this.buttonIconSrc = this.expandImgSrc;
                     this.collapseImgSrc = this.attributes.getNamedItem("collapseImgSrc").value;
                 },
                 init: function (player) {
                     this.player = player;
+                    var expanded = false;
+                    var that = this;
+                    player.addEventListener("webkitfullscreenchange", function () {
+                        if (expanded === true) {
+                            that.buttonIconSrc = that.expandImgSrc;
+                        }
+                        expanded = !expanded;
+                    });
                 },
                 onClick: function () {
-                    if (this.button.getAttribute("src") === this.expandImgSrc) {
+                    if (this.buttonIconSrc === this.expandImgSrc) {
                         this.expand();
-                        this.button.setAttribute("src", this.collapseImgSrc);
                     } else {
                         this.collapse();
-                        this.button.setAttribute("src", this.expandImgSrc);
                     }
                 },
                 expand: function () {
-                    if (!this.player.fullscreenElement &&    // alternative standard method
-                            !this.player.mozFullScreenElement && !this.player.webkitFullscreenElement
-                    ) {  // current working methods
-                        if (this.player.requestFullscreen) {
-                            this.player.requestFullscreen();
-                        } else if (this.player.mozRequestFullScreen) {
-                            this.player.mozRequestFullScreen();
-                        } else if (this.player.webkitRequestFullscreen) {
+                    if (this.player) {
+                        this.buttonIconSrc = this.collapseImgSrc;
+                        if (this.player.webkitRequestFullscreen) {
                             this.player.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+                        } else {
+                            console.log("Only last version of Chrome is supported");
                         }
+                    } else {
+                        console.log("Before using this control, set up player by calling init method")
                     }
                 },
                 collapse: function () {
-                    if (this.player.cancelFullScreen) {
-                        this.player.cancelFullScreen();
-                    } else if (this.player.mozCancelFullScreen) {
-                        this.player.mozCancelFullScreen();
-                    } else if (this.player.webkitCancelFullScreen) {
-                        document.webkitCancelFullScreen();
+                    if (this.player) {
+                        this.buttonIconSrc = this.expandImgSrc;
+                        if (document.webkitCancelFullScreen) {
+                            document.webkitCancelFullScreen();
+                        } else {
+                            console.log("Only last version of Chrome is supported");
+                        }
+                    } else {
+                        console.log("Before using this control, set up player by calling init method")
                     }
                 }
             });

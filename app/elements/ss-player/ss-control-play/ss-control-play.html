@@ -1,0 +1,40 @@
+<link rel="import" href="../../../lib/polymer/polymer.html">
+<link rel="import" href="../../../lib/core-icons/core-icons.html">
+<link rel="import" href="../../../lib/paper-slider/paper-slider.html">
+
+
+<polymer-element name="ss-control-play" attributes="playImgSrc stopImgSrc">
+    <template>
+        <link rel="stylesheet" href="ss-control-play.css"/>
+
+        <paper-icon-button id="playStopButton" on-click="{{playButtonClick}}"></paper-icon-button>
+    </template>
+    <script type="text/javascript">
+        'use strict';
+        (function () {
+            Polymer({
+                playing: false,
+                /** @type String */
+                playImgSrc: null,
+                /** @type String */
+                stopImgSrc: null,
+                ready: function () {
+                    this.playImgSrc = this.attributes.getNamedItem("playImgSrc").value;
+                    this.stopImgSrc = this.attributes.getNamedItem("stopImgSrc").value;
+                    this.$.playStopButton.setAttribute("src", this.playImgSrc);
+                },
+                playButtonClick: function () {
+                    if (this.playing) {
+                        this.fire("on-stop");
+                        this.playing = false;
+                        this.$.playStopButton.setAttribute("src", this.playImgSrc);
+                    } else {
+                        this.fire("on-play");
+                        this.playing = true;
+                        this.$.playStopButton.setAttribute("src", this.stopImgSrc);
+                    }
+                }
+            })
+        })()
+    </script>
+</polymer-element>
