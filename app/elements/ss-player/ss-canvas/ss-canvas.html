@@ -33,6 +33,8 @@
                     this.type = options.type || 'defaultType';
 
                     this[this.type].init(this.parameters.slideTime);
+
+                    this._render(500);
                 },
 
                 _render: function(currentSlideTime) {
