@@ -28,6 +28,7 @@
         <core-toolbar tool>SocialSlide</core-toolbar>
         <ss-menu selected="0">
             <core-item label="Home"><a href="#"></a></core-item>
+            <core-item label="Editor"><a href="#/editor"></a></core-item>
             <core-item label="About us"><a href="#/about-us"></a></core-item>
         </ss-menu>
     </core-header-panel>
@@ -35,9 +36,10 @@
     <div class="content">
         <app-router class="app-router" core-animated-pages transitions="cross-fade-all" mode="hash"
                     trailingSlash="ignore">
-            <app-route path="/" import="elements/ss-editor/ss-editor.html"></app-route>
-            <app-route path="/about-us" import="elements/ss-about-us/ss-about-us.html"></app-route>
-            <app-route path="/watch/:id" import="elements/ss-page-two/ss-page-two.html"></app-route>
+            <app-route path="/" import="elements/ss-page-home/ss-page-home.html"></app-route>
+            <app-route path="/editor" import="elements/ss-page-editor/ss-page-editor.html"></app-route>
+            <app-route path="/about-us" import="elements/ss-page-editor/ss-page-about-us.html"></app-route>
+            <app-route path="/watch/:id" import="elements/ss-page-show/ss-page-show.html"></app-route>
             <app-route path="*" redirect="/"></app-route>
         </app-router>
     </div>

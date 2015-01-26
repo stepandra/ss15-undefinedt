@@ -1,0 +1,25 @@
+<link rel="import" href="../../lib/polymer/polymer.html">
+<link rel="import" href="../../lib/paper-button/paper-button.html">
+
+
+<polymer-element name="ss-page-home">
+    <template>
+        <link rel="stylesheet" href="ss-page-home.css"/>
+        <h1>Hi, there!</h1>
+
+        <div>
+            <p>This project is about photo. Everybody loves photo so we desided to create an photo slider.</p>
+            <paper-button raised class="colored" on-click="{{go}}">Go!</paper-button>
+        </div>
+
+    </template>
+    <script>
+        (function () {
+            Polymer('ss-page-home', {
+                go: function () {
+                    location.hash = "#/editor";
+                }
+            });
+        })();
+    </script>
+</polymer-element>

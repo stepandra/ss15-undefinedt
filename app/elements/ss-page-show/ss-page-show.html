@@ -2,9 +2,9 @@
 <link rel="import" href="../ss-player/ss-player.html">
 <link rel="import" href="../ss-parse-interface/ss-parse-interface.html">
 
-<polymer-element name="ss-page-two">
+<polymer-element name="ss-page-show">
     <template>
-        <link rel="stylesheet" href="ss-page-two.css"/>
+        <link rel="stylesheet" href="ss-page-show.css"/>
         <ss-player id="player"></ss-player>
         <ss-parse-interface id="parseInterface"></ss-parse-interface>
     </template>
@@ -13,7 +13,7 @@
             "use strict";
             var slidesId = '';
 
-            Polymer('ss-page-two', {
+            Polymer('ss-page-show', {
                 ready: function () {
                     var me = this;
                     var hash = location.hash;

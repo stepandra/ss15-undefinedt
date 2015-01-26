@@ -1,20 +1,34 @@
 <link rel="import" href="../../lib/polymer/polymer.html">
+<link rel="import" href="../../lib/paper-button/paper-button.html">
+<link rel="import" href="../../lib/paper-dialog/paper-action-dialog.html">
 <link rel="import" href="../ss-facebook-interface/ss-facebook-interface.html"/>
 <link rel="import" href="../ss-photo-selector/ss-photo-selector.html"/>
 <link rel="import" href="../ss-music-chooser/ss-music-chooser.html"/>
 <link rel="import" href="../ss-timeline/ss-timeline.html"/>
 
-<polymer-element name="ss-editor">
+<polymer-element name="ss-page-editor">
     <template>
-        <link rel="stylesheet" href="ss-editor.css"/>
+        <link rel="stylesheet" href="ss-page-editor.css"/>
+        <paper-action-dialog backdrop layered="false" class="scrolling" id="dialog">
+            <img src="https://pp.vk.me/c621930/v621930725/b9c2/qSIvP2K1YAY.jpg" alt=""/>
+
+            <p>Unfortinatly, the Facebook API can't give access to user photos on our app yet, so for test it you should
+                log in at Facebook by our account.
+               <pre>
+                Login: <i>mitchik@dlit.dp.ua</i>
+                Password: <i>151617181920</i></pre>
+            </p>
+            <paper-button affirmative autofocus>Tap me to close</paper-button>
+        </paper-action-dialog>
         <ss-music-chooser id="musicChooser"></ss-music-chooser>
         <ss-photo-selector id="photoSelector"></ss-photo-selector>
         <ss-timeline id="timeline"></ss-timeline>
     </template>
     <script>
         (function() {
-            Polymer('ss-editor', {
+            Polymer('ss-page-editor', {
                 ready: function() {
+                    this.$.dialog.open();
                     var me = this;
                     this.$.musicChooser.addEventListener('track-selected', function(event) {
                         me.$.timeline.addTrack(event.detail);
